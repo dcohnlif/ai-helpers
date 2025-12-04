@@ -64,7 +64,7 @@ podman run -it \
   -v $(pwd):/workspace:Z \
   -w /workspace \
   --name claude_code \
-  ai-helpers
+  ghcr.io/opendatahub-io/ai-helpers:latest
 ```
 
 **Environment Variables:**
@@ -90,7 +90,7 @@ podman run -it \
   -v $(pwd):/workspace:Z \
   -w /workspace \
   --name claude_code \
-  ai-helpers
+  ghcr.io/opendatahub-io/ai-helpers:latest
   --print "/hello-world:echo Hello from Claude Code!"
 ```
 
