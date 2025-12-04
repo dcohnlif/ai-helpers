@@ -1,10 +1,13 @@
-# Makefile for ai-helpers
-
 # Container runtime (podman or docker)
 CONTAINER_RUNTIME ?= $(shell command -v podman 2>/dev/null || echo docker)
 
 # claudelint image
 CLAUDELINT_IMAGE = ghcr.io/stbenjam/claudelint:main
+
+# AI helpers image
+IMAGE_NAME ?=ai-helpers
+IMAGE_TAG ?= latest
+FULL_IMAGE_NAME = $(IMAGE_NAME):$(IMAGE_TAG)
 
 .PHONY: help
 help: ## Show this help message
@@ -12,21 +15,48 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: lint
-lint: ## Run plugin linter (verbose, strict mode)
+lint: ## Run plugin linter, ruff syntax checker and formatter, and shellcheck
 	@echo "Running claudelint with $(CONTAINER_RUNTIME)..."
 	$(CONTAINER_RUNTIME) run --rm -v $(PWD):/workspace:Z ghcr.io/stbenjam/claudelint:main -v --strict
-
-.PHONY: lint-pull
-lint-pull: ## Pull the latest claudelint image
-	@echo "Pulling latest claudelint image..."
-	$(CONTAINER_RUNTIME) pull $(CLAUDELINT_IMAGE)
+	@echo "Running ruff syntax checker on Python scripts..."
+	@if command -v ruff >/dev/null 2>&1; then \
+		ruff check .; \
+	else \
+		echo "ruff not found, skipping Python syntax checking. Install with: pip install ruff"; \
+		exit 1; \
+	fi
+	@echo "Running ruff formatter on Python scripts..."
+	@ruff format --check --diff .
+	@echo "Running shellcheck on shell scripts..."
+	@if command -v shellcheck >/dev/null 2>&1; then \
+		find . -name '*.sh' -type f -exec shellcheck {} + && echo "All checks passed!"; \
+	else \
+		echo "shellcheck not found, skipping shell script linting. Install with: dnf install ShellCheck"; \
+		exit 1; \
+	fi
 
 .PHONY: update
-update: ## Update plugin documentation and website data
+update: ## Update plugin documentation, Claude settings, and website data
 	@echo "Updating plugin documentation..."
-	@python3 scripts/generate_plugin_docs.py
+	@python3 scripts/generate_tools_docs.py
+	@echo "Updating Claude settings..."
+	@python3 scripts/update_claude_settings.py
 	@echo "Building website data..."
 	@python3 scripts/build-website.py
+	@echo "Formatting Python code with ruff..."
+	@if command -v ruff >/dev/null 2>&1; then \
+		ruff format .; \
+	else \
+		echo "ruff not found, skipping Python formatting. Install with: pip install ruff"; \
+	fi
+
+.PHONY: build
+build: ## Build Claude container image using Containerfile
+	@echo "Building Claude container image $(FULL_IMAGE_NAME) with $(CONTAINER_RUNTIME)..."
+	$(CONTAINER_RUNTIME) build -f images/claude/Containerfile -t $(FULL_IMAGE_NAME) .
+
+.PHONY: container-build
+container-build: build ## Alias for build target
 
 .DEFAULT_GOAL := help
 

@@ -1,22 +1,65 @@
 {
-  "name": "ai-helpers",
-  "owner": "opendatahub-io",
-  "plugins": [
-    {
-      "commands": [
-        {
-          "argument_hint": "[name]",
-          "description": "Hello world plugin implementation",
-          "name": "echo",
-          "synopsis": "/hello-world:echo [name]"
-        }
-      ],
-      "description": "Hello World Plugin",
-      "has_readme": true,
-      "hooks": [],
-      "name": "hello-world",
-      "skills": [],
-      "version": "1.0.0"
-    }
-  ]
+  "name": "odh-ai-helpers",
+  "owner": "ODH",
+  "tools": {
+    "claude_code": [
+      {
+        "name": "hello-world",
+        "description": "A hello world plugin",
+        "commands": [
+          {
+            "name": "echo",
+            "description": "Hello world plugin implementation",
+            "synopsis": "/hello-world:echo [name]",
+            "argument_hint": "[name]"
+          }
+        ],
+        "skills": [],
+        "hooks": [],
+        "agents": [],
+        "has_readme": true
+      },
+      {
+        "name": "utils",
+        "description": "A generic utilities plugin serving as a catch-all for various helper commands and agents",
+        "commands": [
+          {
+            "name": "placeholder",
+            "description": "Placeholder command for the utils plugin",
+            "synopsis": "/utils:placeholder",
+            "argument_hint": ""
+          }
+        ],
+        "skills": [],
+        "hooks": [],
+        "agents": [],
+        "has_readme": true
+      }
+    ],
+    "cursor": [],
+    "gemini": [
+      {
+        "name": "commit-message-assistant",
+        "display_name": "Commit Message Assistant",
+        "description": "I am a Commit Message Assistant. Please provide a description of your code changes, and I will generate a well-formatted commit message for you.",
+        "link": "https://gemini.google.com/gem/1j7GV5eSdCl3jtT2dYWrRlDpV6q7eBqqc?usp=sharing",
+        "commands": [],
+        "skills": [],
+        "hooks": [],
+        "agents": [],
+        "has_readme": false
+      },
+      {
+        "name": "email-copilot",
+        "display_name": "Email Copilot",
+        "description": "My purpose is to take your minimal, raw notes and expand them into complete, polished email drafts, acting as your thought partner.",
+        "link": "https://gemini.google.com/gem/1P0wg_pwCga6YDVKfd3enWY1CRh2EzuXI?usp=sharing",
+        "commands": [],
+        "skills": [],
+        "hooks": [],
+        "agents": [],
+        "has_readme": false
+      }
+    ]
+  }
 }

@@ -1,12 +1,12 @@
 # AI Helpers Website
 
-This directory contains the GitHub Pages website for the ai-helpers project.
+This directory contains the Github Pages website for the ODH ai-helpers project.
 
 ## Structure
 
 - `index.html` - Main website with plugin browser
 - `data.json` - Plugin and command metadata (generated)
-- `.nojekyll` - Tells GitHub Pages not to use Jekyll processing
+- `.nojekyll` - Tells Github Pages not to use Jekyll processing
 
 ## Building
 
@@ -19,9 +19,9 @@ python3 scripts/build-website.py
 
 This extracts information from:
 - `.claude-plugin/marketplace.json` - Plugin registry
-- `plugins/*/commands/*.md` - Command definitions
-- `plugins/*/skills/*/SKILL.md` - Skill definitions
-- `plugins/*/.claude-plugin/plugin.json` - Plugin metadata
+- `claude-plugins/*/commands/*.md` - Command definitions
+- `claude-plugins/*/skills/*/SKILL.md` - Skill definitions
+- `claude-plugins/*/.claude-plugin/plugin.json` - Plugin metadata
 
 ## Local Development
 
@@ -35,13 +35,7 @@ python3 -m http.server 8000
 
 ## Deployment
 
-The website is automatically deployed via GitHub Pages from the `docs/` directory.
-
-To enable GitHub Pages:
-1. Go to repository Settings > Pages
-2. Set Source to "Deploy from a branch"
-3. Select branch (e.g., `main`) and `/docs` folder
-4. Save
+The website is automatically deployed via Github Pages from the `docs/` directory.
 
 The site will be available at: `https://opendatahub-io.github.io/ai-helpers/`
 
@@ -51,6 +45,6 @@ When plugins or commands are added/modified:
 
 1. Run `python3 scripts/build-website.py` to regenerate `data.json`
 2. Commit both `data.json` and any changes
-3. Push to trigger GitHub Pages rebuild
+3. Push to trigger Github Pages rebuild
 
-Alternatively, set up a GitHub Action to automatically rebuild on changes.
+Alternatively, set up a Github workflow to automatically rebuild on changes.

@@ -1,0 +1,37 @@
+# Baseline pre-commit configuration for Red Hat AI-Ready repositories
+#
+# This config includes:
+# 1. Red Hat security/compliance hooks (rh-pre-commit)
+# 2. AI-readiness hooks from this repository
+#
+# To use this config:
+#   1. Copy this file to your repo root as .pre-commit-config.yaml
+#   2. Run: pre-commit install
+#   3. Run: pre-commit install --hook-type pre-push  (for AGENTS.md validation)
+#   4. Run: pre-commit run --all-files (to test)
+#
+# See: https://pre-commit.com/
+
+repos:
+  # AI-readiness hooks
+  - repo: https://github.com/openshift-hyperfleet/rh-hooks-ai
+    rev: v1.0.3  # Updated automatically by release workflow
+    hooks:
+      - id: check-rh-precommit
+      - id: ai-attribution-reminder
+
+  # Local repository validation hooks
+  - repo: local
+    hooks:
+      - id: make-lint
+        name: Run make lint
+        entry: make lint
+        language: system
+        always_run: true
+        pass_filenames: false
+      - id: make-update
+        name: Run make update
+        entry: make update
+        language: system
+        always_run: true
+        pass_filenames: false

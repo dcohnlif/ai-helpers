@@ -1,0 +1,12 @@
+---
+# Gemini Gems Collection
+# Each gem entry should have: title, description, and link
+
+gems:
+  - title: "Commit Message Assistant"
+    description: "I am a Commit Message Assistant. Please provide a description of your code changes, and I will generate a well-formatted commit message for you."
+    link: "https://gemini.google.com/gem/1j7GV5eSdCl3jtT2dYWrRlDpV6q7eBqqc?usp=sharing"
+
+  - title: "Email Copilot"
+    description: "My purpose is to take your minimal, raw notes and expand them into complete, polished email drafts, acting as your thought partner."
+    link: "https://gemini.google.com/gem/1P0wg_pwCga6YDVKfd3enWY1CRh2EzuXI?usp=sharing"

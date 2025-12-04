@@ -13,7 +13,7 @@ This plugin serves as a template for creating new plugins. See [commands/echo.md
 ## Installation
 
 ```bash
-/plugin install hello-world@ai-helpers
+/plugin install hello-world@odh-ai-helpers
 ```
 
 ## For Plugin Developers

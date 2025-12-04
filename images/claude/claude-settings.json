@@ -1,6 +1,6 @@
 {
   "extraKnownMarketplaces": {
-    "ai-helpers": {
+    "odh-ai-helpers": {
       "source": {
         "source": "directory",
         "path": "/opt/ai-helpers"
@@ -8,6 +8,7 @@
     }
   },
   "enabledPlugins": {
-    "hello-world@ai-helpers": true
+    "hello-world@odh-ai-helpers": true,
+    "utils@odh-ai-helpers": true
   }
 }

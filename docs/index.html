@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Helpers Marketplace - Claude Code Plugins</title>
+    <title>AI Helpers Marketplace</title>
     <style>
+        /* Default colors (dark mode for legacy browsers) */
         :root {
             --primary: #ee0000;
             --primary-dark: #c00000;
@@ -21,6 +22,44 @@
             --radius: 12px;
         }
 
+        /* Light mode colors */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --primary: #ee0000;
+                --primary-dark: #c00000;
+                --secondary: #ff6b6b;
+                --bg-dark: #f5f5f5;
+                --bg-card: #ffffff;
+                --bg-code: #f0f0f0;
+                --text-primary: #1a1a1a;
+                --text-secondary: #4a4a4a;
+                --text-muted: #6a6a6a;
+                --border: #d0d0d0;
+                --success: #2d7a1f;
+                --accent: #d97700;
+                --radius: 12px;
+            }
+        }
+
+        /* Dark mode colors (explicit) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #ee0000;
+                --primary-dark: #c00000;
+                --secondary: #ff6b6b;
+                --bg-dark: #0f0f0f;
+                --bg-card: #1a1a1a;
+                --bg-code: #2d2d2d;
+                --text-primary: #f5f5f5;
+                --text-secondary: #d4d4d4;
+                --text-muted: #a3a3a3;
+                --border: #3d3d3d;
+                --success: #92cc6f;
+                --accent: #ff9800;
+                --radius: 12px;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -29,14 +68,14 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -53,11 +92,11 @@
         }
 
         body {
-            padding-top: 60px;
+            padding-top: 120px;
         }
 
         .navbar-content {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 0 2rem;
             display: flex;
@@ -155,6 +194,92 @@
 
         .search-input::placeholder {
             color: var(--text-muted);
+        }
+
+        .filter-box {
+            margin-bottom: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .filter-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-checkboxes {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-checkbox:hover {
+            opacity: 0.8;
+        }
+
+        .filter-checkbox input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-code);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .filter-checkbox input[type="checkbox"]:checked + .checkbox-custom {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .filter-checkbox input[type="checkbox"]:checked + .checkbox-custom::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .checkbox-label.claude-code {
+            color: var(--primary);
+        }
+
+        .checkbox-label.cursor {
+            color: var(--accent);
+        }
+
+        .checkbox-label.gemini {
+            color: var(--success);
+        }
+
+        .filter-checkbox input[type="checkbox"]:checked ~ .checkbox-label {
+            color: var(--text-primary);
         }
 
         .autocomplete-dropdown {
@@ -272,7 +397,7 @@
 
         .plugins-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
@@ -498,14 +623,7 @@
             background: var(--primary-dark);
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 968px) {
+        @media (max-width: 1280px) {
             .navbar-content {
                 flex-direction: column;
                 align-items: flex-start;
@@ -533,6 +651,14 @@
             .plugins-grid {
                 grid-template-columns: 1fr;
             }
+
+            .filter-checkboxes {
+                gap: 1rem;
+            }
+
+            .checkbox-label {
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -548,6 +674,19 @@
             .nav-link {
                 width: 100%;
                 text-align: center;
+            }
+
+            .filter-box {
+                padding: 0.75rem;
+            }
+
+            .filter-checkboxes {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .filter-title {
+                font-size: 0.8rem;
             }
         }
 
@@ -721,6 +860,148 @@
         .readme-button svg {
             flex-shrink: 0;
         }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .visitor-stats-btn {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+
+        .visitor-stats-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(238, 0, 0, 0.3);
+        }
+
+        /* Visitor Modal Styles */
+        .visitor-modal-body {
+            padding: 1.5rem 2rem 2rem 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value-large {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label-large {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stats-info {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stats-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .stats-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0.25rem 0;
+        }
+
+        .dashboard-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .dashboard-link:hover {
+            color: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -729,12 +1010,12 @@
             <div class="navbar-brand">
                 <div class="navbar-title">
                     <h1>AI Helpers Marketplace</h1>
-                    <p class="subtitle">Claude Code Plugins for OpenDataHub</p>
+                    <p class="subtitle">Claude Code & Cursor Tools</p>
                 </div>
                 <div class="navbar-stats">
                     <div class="stat">
                         <div class="stat-value" id="plugin-count">0</div>
-                        <div class="stat-label">Plugins</div>
+                        <div class="stat-label">Tools</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value" id="command-count">0</div>
@@ -748,12 +1029,21 @@
                         <div class="stat-value" id="hook-count">0</div>
                         <div class="stat-label">Hooks</div>
                     </div>
+                    <div class="stat">
+                        <div class="stat-value" id="agent-count">0</div>
+                        <div class="stat-label">Agents</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="gem-count">0</div>
+                        <div class="stat-label">Gems</div>
+                    </div>
                 </div>
             </div>
             <div class="navbar-links">
                 <a href="#install" class="nav-link primary">How to Install</a>
-                <a href="https://github.com/opendatahub-io/ai-helpers" class="nav-link" target="_blank">GitHub</a>
-                <a href="https://docs.claude.com/en/docs/claude-code/overview" class="nav-link" target="_blank">Docs</a>
+                <a href="https://github.com/opendatahub-io/ai-helpers" class="nav-link" target="_blank">AI Helpers</a>
+                <a href="https://docs.claude.com/en/docs/claude-code/overview" class="nav-link" target="_blank">Claude Code Docs</a>
+                <a href="https://cursor.com/docs" class="nav-link" target="_blank">Cursor Docs</a>
             </div>
         </div>
     </div>
@@ -764,21 +1054,65 @@
                 type="text"
                 id="search"
                 class="search-input"
-                placeholder="Search plugins, commands, and skills..."
+                placeholder="Search tools, commands, and skills..."
                 autocomplete="off"
             >
             <div id="autocomplete" class="autocomplete-dropdown"></div>
         </div>
 
+        <div class="filter-box">
+            <div class="filter-title">Filter by Tool Type:</div>
+            <div class="filter-checkboxes">
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="filter-claude" value="claude_code" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label claude-code">Claude Code</span>
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="filter-cursor" value="cursor" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label cursor">Cursor</span>
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="filter-gemini" value="gemini" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label gemini">Gemini Gems</span>
+                </label>
+            </div>
+        </div>
+
         <div class="plugins-grid" id="plugins-grid"></div>
 
         <div class="no-results" id="no-results">
-            No plugins or commands found matching your search.
+            No tools or commands found matching your search.
         </div>
+    </div>
 
-        <footer>
-            <p>Built with Claude Code | <a href="https://github.com/opendatahub-io/ai-helpers" style="color: var(--primary);">opendatahub-io/ai-helpers</a></p>
-        </footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <p class="footer-text">AI Helpers Marketplace</p>
+            </div>
+            <div class="footer-section">
+                <button id="visitor-stats-btn" class="visitor-stats-btn" onclick="showVisitorStats()">
+                    📊 Statistics
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Visitor Statistics Modal -->
+    <div id="visitor-modal" class="modal" onclick="closeVisitorModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">📊 Visit Statistics</h2>
+                <button class="close-button" onclick="closeVisitorModal()">&times;</button>
+            </div>
+            <div id="visitor-modal-body" class="visitor-modal-body">
+                <div class="loading-spinner">Loading statistics...</div>
+            </div>
+        </div>
     </div>
 
     <div id="modal" class="modal" onclick="closeModal(event)">
@@ -792,26 +1126,87 @@
     </div>
 
     <script>
-        let allPlugins = [];
+        let allTools = [];
+        let toolsData = {};
+        let filteredTools = [];
+
+        function getSelectedToolTypes() {
+            const claudeChecked = document.getElementById('filter-claude').checked;
+            const cursorChecked = document.getElementById('filter-cursor').checked;
+            const geminiChecked = document.getElementById('filter-gemini').checked;
+
+            const selected = [];
+            if (claudeChecked) selected.push('claude_code');
+            if (cursorChecked) selected.push('cursor');
+            if (geminiChecked) selected.push('gemini');
+
+            return selected;
+        }
+
+        function applyFilters() {
+            const selectedTypes = getSelectedToolTypes();
+
+            if (selectedTypes.length === 0) {
+                filteredTools = [];
+            } else {
+                filteredTools = allTools.filter(tool => selectedTypes.includes(tool.tool_type));
+            }
+        }
 
         async function loadData() {
             try {
                 const response = await fetch('data.json');
                 const data = await response.json();
 
-                // Sort plugins alphabetically
-                allPlugins = data.plugins.sort((a, b) => a.name.localeCompare(b.name));
+                // Store tools data
+                toolsData = data.tools || {};
+
+                // Combine all tools from both Claude Code and Cursor, adding tool type
+                allTools = [];
+
+                if (toolsData.claude_code) {
+                    allTools.push(...toolsData.claude_code.map(tool => ({
+                        ...tool,
+                        tool_type: 'claude_code',
+                        display_name: `${tool.name} (Claude Code)`
+                    })));
+                }
+
+                if (toolsData.cursor) {
+                    allTools.push(...toolsData.cursor.map(tool => ({
+                        ...tool,
+                        tool_type: 'cursor',
+                        display_name: `${tool.name} (Cursor)`
+                    })));
+                }
+
+                if (toolsData.gemini) {
+                    allTools.push(...toolsData.gemini.map(tool => ({
+                        ...tool,
+                        tool_type: 'gemini',
+                        display_name: tool.display_name || tool.name
+                    })));
+                }
+
+                // Sort tools alphabetically
+                allTools.sort((a, b) => a.name.localeCompare(b.name));
 
                 // Update stats
-                document.getElementById('plugin-count').textContent = data.plugins.length;
-                const totalCommands = data.plugins.reduce((sum, p) => sum + p.commands.length, 0);
+                const totalPlugins = allTools.length;
+                document.getElementById('plugin-count').textContent = totalPlugins;
+                const totalCommands = allTools.reduce((sum, p) => sum + p.commands.length, 0);
                 document.getElementById('command-count').textContent = totalCommands;
-                const totalSkills = data.plugins.reduce((sum, p) => sum + (p.skills || []).length, 0);
+                const totalSkills = allTools.reduce((sum, p) => sum + (p.skills || []).length, 0);
                 document.getElementById('skill-count').textContent = totalSkills;
-                const totalHooks = data.plugins.reduce((sum, p) => sum + (p.hooks || []).length, 0);
+                const totalHooks = allTools.reduce((sum, p) => sum + (p.hooks || []).length, 0);
                 document.getElementById('hook-count').textContent = totalHooks;
+                const totalAgents = allTools.reduce((sum, p) => sum + (p.agents || []).length, 0);
+                document.getElementById('agent-count').textContent = totalAgents;
+                const totalGems = allTools.filter(tool => tool.tool_type === 'gemini').length;
+                document.getElementById('gem-count').textContent = totalGems;
 
-                renderPlugins(allPlugins);
+                applyFilters();
+                renderPlugins(filteredTools);
 
                 // Handle hash after data is loaded
                 handleHashChange();
@@ -820,11 +1215,11 @@
             }
         }
 
-        function renderPlugins(plugins) {
+        function renderPlugins(tools) {
             const grid = document.getElementById('plugins-grid');
             const noResults = document.getElementById('no-results');
 
-            if (plugins.length === 0) {
+            if (tools.length === 0) {
                 grid.innerHTML = '';
                 noResults.classList.add('show');
                 return;
@@ -832,22 +1227,39 @@
 
             noResults.classList.remove('show');
 
-            grid.innerHTML = plugins.map(plugin => {
-                const skills = plugin.skills || [];
-                const hooks = plugin.hooks || [];
-                const commandCount = plugin.commands.length;
+            grid.innerHTML = tools.map(tool => {
+                const skills = tool.skills || [];
+                const hooks = tool.hooks || [];
+                const agents = tool.agents || [];
+                const commandCount = tool.commands.length;
                 const skillCount = skills.length;
                 const hookCount = hooks.length;
+                const agentCount = agents.length;
+
+                // Tool type badge color
+                let toolTypeColor, toolTypeLabel;
+                if (tool.tool_type === 'claude_code') {
+                    toolTypeColor = 'var(--primary)';
+                    toolTypeLabel = 'Claude Code';
+                } else if (tool.tool_type === 'cursor') {
+                    toolTypeColor = 'var(--accent)';
+                    toolTypeLabel = 'Cursor';
+                } else if (tool.tool_type === 'gemini') {
+                    toolTypeColor = 'var(--success)';
+                    toolTypeLabel = 'Gemini Gems';
+                }
 
                 return `
-                <div class="plugin-card" data-plugin="${plugin.name}" onclick="showPluginModal('${plugin.name}')">
+                <div class="plugin-card" data-plugin="${tool.name}" data-tool-type="${tool.tool_type}" onclick="showPluginModal('${tool.name}', '${tool.tool_type}')">
                     <div class="plugin-header">
                         <div>
-                            <div class="plugin-name">${plugin.name}</div>
-                            <div class="plugin-version">v${plugin.version}</div>
+                            <div class="plugin-name">${tool.tool_type === 'gemini' ? (tool.display_name || tool.name) : tool.name}</div>
+                            <div style="display: flex; gap: 0.5rem; align-items: center; margin: 0.25rem 0;">
+                                <div class="plugin-version" style="background: ${toolTypeColor}; color: white;">${toolTypeLabel}</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="plugin-description">${plugin.description}</div>
+                    <div class="plugin-description">${tool.description}</div>
                     <div class="item-counts">
                         ${commandCount > 0 ? `
                         <div class="item-count">
@@ -867,27 +1279,49 @@
                             <span>hook${hookCount !== 1 ? 's' : ''}</span>
                         </div>
                         ` : ''}
+                        ${agentCount > 0 ? `
+                        <div class="item-count">
+                            <span class="item-count-badge">${agentCount}</span>
+                            <span>agent${agentCount !== 1 ? 's' : ''}</span>
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
             `;
             }).join('');
         }
 
-        function showPluginModal(pluginName) {
-            const plugin = allPlugins.find(p => p.name === pluginName);
-            if (!plugin) return;
+        function showPluginModal(toolName, toolType) {
+            const tool = allTools.find(t => t.name === toolName && t.tool_type === toolType);
+            if (!tool) return;
 
-            const skills = plugin.skills || [];
-            const hooks = plugin.hooks || [];
-            const commandCount = plugin.commands.length;
+            const skills = tool.skills || [];
+            const hooks = tool.hooks || [];
+            const agents = tool.agents || [];
+            const commandCount = tool.commands.length;
             const skillCount = skills.length;
             const hookCount = hooks.length;
+            const agentCount = agents.length;
+
+            // Tool type styling
+            let toolTypeColor, toolTypeLabel;
+            if (tool.tool_type === 'claude_code') {
+                toolTypeColor = 'var(--primary)';
+                toolTypeLabel = 'Claude Code';
+            } else if (tool.tool_type === 'cursor') {
+                toolTypeColor = 'var(--accent)';
+                toolTypeLabel = 'Cursor';
+            } else if (tool.tool_type === 'gemini') {
+                toolTypeColor = 'var(--success)';
+                toolTypeLabel = 'Gemini Gems';
+            }
 
             // Build header with title, metadata, and version
             const headerContent = `
                 <div class="modal-title-section">
-                    <div class="modal-title">${plugin.name}</div>
+                    <div class="modal-title">${tool.tool_type === 'gemini' ? (tool.display_name || tool.name) : tool.name}</div>
                     <div class="modal-meta">
+                        <div class="plugin-version" style="background: ${toolTypeColor}; color: white;">${toolTypeLabel}</div>
                         ${commandCount > 0 ? `
                         <div class="item-count">
                             <span class="item-count-badge">${commandCount}</span>
@@ -906,15 +1340,20 @@
                             <span>hook${hookCount !== 1 ? 's' : ''}</span>
                         </div>
                         ` : ''}
+                        ${agentCount > 0 ? `
+                        <div class="item-count">
+                            <span class="item-count-badge">${agentCount}</span>
+                            <span>agent${agentCount !== 1 ? 's' : ''}</span>
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
                     <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                        <span class="plugin-version">v${plugin.version}</span>
                         <button class="close-button" onclick="closeModal()">&times;</button>
                     </div>
-                    ${plugin.has_readme ? `
-                    <a href="https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/${plugin.name}/README.md"
+                    ${tool.has_readme ? `
+                    <a href="https://github.com/opendatahub-io/ai-helpers/blob/main/${tool.tool_type === 'claude_code' ? 'claude-plugins/' + tool.name : tool.tool_type === 'gemini' ? 'gemini-gems' : 'cursor'}/README.md"
                        target="_blank"
                        class="readme-button">
                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -928,62 +1367,100 @@
             `;
 
             let content = `
-                <div class="plugin-description" style="margin-bottom: 1rem;">${plugin.description}</div>
+                <div class="plugin-description" style="margin-bottom: 1.5rem;">${tool.description}</div>
+                ${tool.tool_type !== 'gemini' ? `
                 <div style="margin-bottom: 1.5rem;">
-                    <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Install this plugin:</div>
+                    <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Installation:</div>
                     <div style="position: relative;">
-                        <div class="code-block" style="padding-right: 5rem;">/plugin install ${plugin.name}@ai-helpers</div>
-                        <button class="copy-button" onclick="copyInstallCommand('${plugin.name}', event)" title="Copy to clipboard">
+                        ${tool.tool_type === 'claude_code' ? `
+                        <div class="code-block" style="padding-right: 5rem;">/plugin install ${tool.name}@odh-ai-helpers</div>
+                        <button class="copy-button" onclick="copyInstallCommand('${tool.name}', '${tool.tool_type}', event)" title="Copy to clipboard">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.75 4.75H10.25V1.75H5.75V4.75ZM5.75 4.75H2.75V14.25H10.25V11.25M5.75 4.75V7.75H13.25V14.25H10.25V11.25M10.25 11.25H13.25V7.75H5.75V4.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             <span class="copy-button-text">Copy</span>
                         </button>
+                        ` : `
+                        <div class="code-block" style="padding-right: 5rem;">ln -sf $(pwd)/cursor/commands/* ~/.cursor/commands/</div>
+                        <button class="copy-button" onclick="copyInstallCommand('${tool.name}', '${tool.tool_type}', event)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.75 4.75H10.25V1.75H5.75V4.75ZM5.75 4.75H2.75V14.25H10.25V11.25M5.75 4.75V7.75H13.25V14.25H10.25V11.25M10.25 11.25H13.25V7.75H5.75V4.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="copy-button-text">Copy</span>
+                        </button>
+                        `}
                     </div>
                 </div>
+                ` : `
+                <div style="margin-bottom: 1.5rem; text-align: center;">
+                    ${tool.link ? `
+                    <a href="${tool.link}" target="_blank" class="install-button" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <span>🔗</span>
+                        Open ${tool.display_name || tool.name}
+                    </a>
+                    ` : ''}
+                </div>
+                `}
             `;
 
-            if (commandCount > 0) {
-                content += `
-                    <div class="section-title">Commands</div>
-                    ${plugin.commands.map(cmd => `
-                        <div class="command-item">
-                            <div class="command-name">/${plugin.name}:${cmd.name}</div>
-                            ${cmd.synopsis ? `<div class="command-synopsis">${cmd.synopsis}</div>` : ''}
-                            ${cmd.description ? `<div class="command-description">${cmd.description}</div>` : ''}
-                        </div>
-                    `).join('')}
-                `;
-            }
+            // Only show commands/skills/hooks for non-Gemini tools
+            if (tool.tool_type !== 'gemini') {
+                if (commandCount > 0) {
+                    content += `
+                        <div class="section-title">Commands</div>
+                        ${tool.commands.map(cmd => `
+                            <div class="command-item">
+                                ${cmd.synopsis ? `<div class="command-synopsis">${cmd.synopsis}</div>` : ''}
+                                ${cmd.description ? `<div class="command-description">${cmd.description}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    `;
+                }
 
-            if (skillCount > 0) {
-                content += `
-                    <div class="section-title">Skills</div>
-                    ${skills.map(skill => `
-                        <div class="skill-item">
-                            <div class="skill-name">${skill.name}</div>
-                            <div class="skill-id">${plugin.name}:${skill.id}</div>
-                            ${skill.description ? `<div class="skill-description">${skill.description}</div>` : ''}
-                        </div>
-                    `).join('')}
-                `;
-            }
+                if (skillCount > 0) {
+                    content += `
+                        <div class="section-title">Skills</div>
+                        ${skills.map(skill => `
+                            <div class="skill-item">
+                                <div class="skill-name">${skill.name}</div>
+                                <div class="skill-id">${tool.name}:${skill.id}</div>
+                                ${skill.description ? `<div class="skill-description">${skill.description}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    `;
+                }
 
-            if (hookCount > 0) {
-                content += `
-                    <div class="section-title">Hooks</div>
-                    ${hooks.map(hook => `
-                        <div class="hook-item">
-                            <div class="hook-name">${hook.name}</div>
-                            <div class="hook-type">Type: ${hook.type}</div>
-                            ${hook.description ? `<div class="hook-description">${hook.description}</div>` : ''}
-                        </div>
-                    `).join('')}
-                `;
+                if (hookCount > 0) {
+                    content += `
+                        <div class="section-title">Hooks</div>
+                        ${hooks.map(hook => `
+                            <div class="hook-item">
+                                <div class="hook-name">${hook.name}</div>
+                                <div class="hook-type">Type: ${hook.type}</div>
+                                ${hook.description ? `<div class="hook-description">${hook.description}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    `;
+                }
+
+                if (agentCount > 0) {
+                    content += `
+                        <div class="section-title">Agents</div>
+                        ${agents.map(agent => `
+                            <div class="skill-item">
+                                <div class="skill-name">${agent.name}</div>
+                                <div class="skill-id">${tool.name}:${agent.id}</div>
+                                ${agent.description ? `<div class="skill-description">${agent.description}</div>` : ''}
+                                ${agent.tools ? `<div class="skill-description"><strong>Tools:</strong> ${agent.tools}</div>` : ''}
+                                ${agent.model ? `<div class="skill-description"><strong>Model:</strong> ${agent.model}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    `;
+                }
             }
 
             showModal(headerContent, content);
-            window.location.hash = pluginName;
+            window.location.hash = `${toolName}-${toolType}`;
         }
 
         function searchAndShowAutocomplete(query) {
@@ -992,59 +1469,75 @@
 
             if (!lowerQuery) {
                 autocomplete.classList.remove('show');
-                renderPlugins(allPlugins);
+                renderPlugins(filteredTools);
                 return;
             }
 
             // Find matching items
             const results = {
-                plugins: [],
+                tools: [],
                 commands: [],
                 skills: [],
-                hooks: []
+                hooks: [],
+                agents: []
             };
 
-            allPlugins.forEach(plugin => {
-                // Check plugin match
-                if (plugin.name.toLowerCase().includes(lowerQuery) ||
-                    plugin.description.toLowerCase().includes(lowerQuery)) {
-                    results.plugins.push(plugin);
+            filteredTools.forEach(tool => {
+                // Check tool match
+                if (tool.name.toLowerCase().includes(lowerQuery) ||
+                    tool.description.toLowerCase().includes(lowerQuery)) {
+                    results.tools.push(tool);
                 }
 
                 // Check command matches
-                plugin.commands.forEach(cmd => {
+                tool.commands.forEach(cmd => {
                     if (cmd.name.toLowerCase().includes(lowerQuery) ||
                         (cmd.description && cmd.description.toLowerCase().includes(lowerQuery)) ||
                         (cmd.synopsis && cmd.synopsis.toLowerCase().includes(lowerQuery))) {
                         results.commands.push({
-                            plugin: plugin.name,
+                            tool: tool,
                             command: cmd
                         });
                     }
                 });
 
                 // Check skill matches
-                const skills = plugin.skills || [];
+                const skills = tool.skills || [];
                 skills.forEach(skill => {
                     if (skill.name.toLowerCase().includes(lowerQuery) ||
                         skill.id.toLowerCase().includes(lowerQuery) ||
                         (skill.description && skill.description.toLowerCase().includes(lowerQuery))) {
                         results.skills.push({
-                            plugin: plugin.name,
+                            tool: tool,
                             skill: skill
                         });
                     }
                 });
 
                 // Check hook matches
-                const hooks = plugin.hooks || [];
+                const hooks = tool.hooks || [];
                 hooks.forEach(hook => {
                     if (hook.name.toLowerCase().includes(lowerQuery) ||
                         hook.type.toLowerCase().includes(lowerQuery) ||
                         (hook.description && hook.description.toLowerCase().includes(lowerQuery))) {
                         results.hooks.push({
-                            plugin: plugin.name,
+                            tool: tool,
                             hook: hook
+                        });
+                    }
+                });
+
+                // Check agent matches
+                const agents = tool.agents || [];
+                agents.forEach(agent => {
+                    if (agent.name.toLowerCase().includes(lowerQuery) ||
+                        agent.id.toLowerCase().includes(lowerQuery) ||
+                        (agent.description && agent.description.toLowerCase().includes(lowerQuery)) ||
+                        (agent.tools && agent.tools.toLowerCase().includes(lowerQuery)) ||
+                        (agent.model && agent.model.toLowerCase().includes(lowerQuery))) {
+                        results.agents.push({
+                            tool: tool,
+                            agent: agent
                         });
                     }
                 });
@@ -1053,20 +1546,21 @@
             // Show autocomplete
             updateAutocomplete(results);
 
-            // Filter plugin cards
-            const matchedPluginNames = new Set([
-                ...results.plugins.map(p => p.name),
-                ...results.commands.map(c => c.plugin),
-                ...results.skills.map(s => s.plugin),
-                ...results.hooks.map(h => h.plugin)
+            // Filter tool cards
+            const matchedToolIds = new Set([
+                ...results.tools.map(t => `${t.name}-${t.tool_type}`),
+                ...results.commands.map(c => `${c.tool.name}-${c.tool.tool_type}`),
+                ...results.skills.map(s => `${s.tool.name}-${s.tool.tool_type}`),
+                ...results.hooks.map(h => `${h.tool.name}-${h.tool.tool_type}`),
+                ...results.agents.map(a => `${a.tool.name}-${a.tool.tool_type}`)
             ]);
-            const filtered = allPlugins.filter(p => matchedPluginNames.has(p.name));
+            const filtered = filteredTools.filter(t => matchedToolIds.has(`${t.name}-${t.tool_type}`));
             renderPlugins(filtered);
         }
 
         function updateAutocomplete(results) {
             const autocomplete = document.getElementById('autocomplete');
-            const hasResults = results.plugins.length > 0 || results.commands.length > 0 || results.skills.length > 0 || results.hooks.length > 0;
+            const hasResults = results.tools.length > 0 || results.commands.length > 0 || results.skills.length > 0 || results.hooks.length > 0 || results.agents.length > 0;
 
             if (!hasResults) {
                 autocomplete.innerHTML = '<div class="autocomplete-empty">No matches found</div>';
@@ -1076,17 +1570,17 @@
 
             let html = '';
 
-            // Plugins section
-            if (results.plugins.length > 0) {
+            // Tools section
+            if (results.tools.length > 0) {
                 html += `
                     <div class="autocomplete-section">
-                        <div class="autocomplete-section-title">Plugins</div>
-                        ${results.plugins.map(plugin => `
-                            <div class="autocomplete-item" onclick="showPluginModal('${plugin.name}')">
-                                <div class="autocomplete-item-icon plugin">${plugin.name.charAt(0).toUpperCase()}</div>
+                        <div class="autocomplete-section-title">Tools</div>
+                        ${results.tools.map(tool => `
+                            <div class="autocomplete-item" onclick="showPluginModal('${tool.name}', '${tool.tool_type}')">
+                                <div class="autocomplete-item-icon plugin">${tool.name.charAt(0).toUpperCase()}</div>
                                 <div class="autocomplete-item-content">
-                                    <div class="autocomplete-item-title">${plugin.name}</div>
-                                    <div class="autocomplete-item-subtitle">${plugin.description}</div>
+                                    <div class="autocomplete-item-title">${tool.name} (${tool.tool_type === 'claude_code' ? 'Claude Code' : 'Cursor'})</div>
+                                    <div class="autocomplete-item-subtitle">${tool.description}</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -1100,10 +1594,10 @@
                     <div class="autocomplete-section">
                         <div class="autocomplete-section-title">Commands</div>
                         ${results.commands.slice(0, 10).map(item => `
-                            <div class="autocomplete-item" onclick="showPluginModal('${item.plugin}')">
+                            <div class="autocomplete-item" onclick="showPluginModal('${item.tool.name}', '${item.tool.tool_type}')">
                                 <div class="autocomplete-item-icon command">$</div>
                                 <div class="autocomplete-item-content">
-                                    <div class="autocomplete-item-title">/${item.plugin}:${item.command.name}</div>
+                                    <div class="autocomplete-item-title">${item.tool.tool_type === 'cursor' ? '/' + item.command.full_command_name : '/' + item.tool.name + ':' + item.command.name}</div>
                                     <div class="autocomplete-item-subtitle">${item.command.description || item.command.synopsis || ''}</div>
                                 </div>
                             </div>
@@ -1118,11 +1612,11 @@
                     <div class="autocomplete-section">
                         <div class="autocomplete-section-title">Skills</div>
                         ${results.skills.slice(0, 10).map(item => `
-                            <div class="autocomplete-item" onclick="showPluginModal('${item.plugin}')">
+                            <div class="autocomplete-item" onclick="showPluginModal('${item.tool.name}', '${item.tool.tool_type}')">
                                 <div class="autocomplete-item-icon skill">⚡</div>
                                 <div class="autocomplete-item-content">
                                     <div class="autocomplete-item-title">${item.skill.name}</div>
-                                    <div class="autocomplete-item-subtitle">${item.plugin}:${item.skill.id}</div>
+                                    <div class="autocomplete-item-subtitle">${item.tool.name}:${item.skill.id}</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -1136,11 +1630,29 @@
                     <div class="autocomplete-section">
                         <div class="autocomplete-section-title">Hooks</div>
                         ${results.hooks.slice(0, 10).map(item => `
-                            <div class="autocomplete-item" onclick="showPluginModal('${item.plugin}')">
+                            <div class="autocomplete-item" onclick="showPluginModal('${item.tool.name}', '${item.tool.tool_type}')">
                                 <div class="autocomplete-item-icon hook">🪝</div>
                                 <div class="autocomplete-item-content">
                                     <div class="autocomplete-item-title">${item.hook.name}</div>
                                     <div class="autocomplete-item-subtitle">${item.hook.type}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Agents section
+            if (results.agents.length > 0) {
+                html += `
+                    <div class="autocomplete-section">
+                        <div class="autocomplete-section-title">Agents</div>
+                        ${results.agents.slice(0, 10).map(item => `
+                            <div class="autocomplete-item" onclick="showPluginModal('${item.tool.name}', '${item.tool.tool_type}')">
+                                <div class="autocomplete-item-icon skill">🤖</div>
+                                <div class="autocomplete-item-content">
+                                    <div class="autocomplete-item-title">${item.agent.name}</div>
+                                    <div class="autocomplete-item-subtitle">${item.tool.name}:${item.agent.id}</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -1175,14 +1687,50 @@
         }
 
         // Copy install command to clipboard
-        function copyInstallCommand(pluginName, event) {
-            const command = `/plugin install ${pluginName}@ai-helpers`;
+        function copyInstallCommand(toolName, toolType, event) {
+            let command;
+            if (toolType === 'claude_code') {
+                command = `/plugin install ${toolName}@odh-ai-helpers`;
+            } else {
+                command = `ln -sf $(pwd)/cursor/commands/* ~/.cursor/commands/`;
+            }
             copyToClipboard(command, event);
         }
 
         // Search functionality
         document.getElementById('search').addEventListener('input', (e) => {
             searchAndShowAutocomplete(e.target.value);
+        });
+
+        // Filter functionality
+        document.getElementById('filter-claude').addEventListener('change', () => {
+            applyFilters();
+            const currentQuery = document.getElementById('search').value;
+            if (currentQuery.trim()) {
+                searchAndShowAutocomplete(currentQuery);
+            } else {
+                renderPlugins(filteredTools);
+            }
+        });
+
+        document.getElementById('filter-cursor').addEventListener('change', () => {
+            applyFilters();
+            const currentQuery = document.getElementById('search').value;
+            if (currentQuery.trim()) {
+                searchAndShowAutocomplete(currentQuery);
+            } else {
+                renderPlugins(filteredTools);
+            }
+        });
+
+        document.getElementById('filter-gemini').addEventListener('change', () => {
+            applyFilters();
+            const currentQuery = document.getElementById('search').value;
+            if (currentQuery.trim()) {
+                searchAndShowAutocomplete(currentQuery);
+            } else {
+                renderPlugins(filteredTools);
+            }
         });
 
         // Close autocomplete when clicking outside
@@ -1232,11 +1780,16 @@
 
         function showInstallModal() {
             const content = `
-                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
-                    Install plugins from the ai-helpers marketplace using Claude Code:
+                <h3 style="margin-bottom: 1rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Claude Code</span>
+                    Installation
+                </h3>
+
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Install plugins from the ODH ai-helpers marketplace:
                 </p>
 
-                <div style="position: relative; margin-bottom: 1.5rem;">
+                <div style="position: relative; margin-bottom: 1rem;">
                     <div class="code-block" style="padding-right: 5rem;">/plugin marketplace add opendatahub-io/ai-helpers</div>
                     <button class="copy-button" onclick="copyToClipboard('/plugin marketplace add opendatahub-io/ai-helpers', event)" title="Copy to clipboard">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1246,23 +1799,69 @@
                     </button>
                 </div>
 
-                <p style="margin: 1.5rem 0 1rem; color: var(--text-secondary);">
+                <div style="background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                    <strong style="color: var(--primary);">⚠️ Important:</strong> Changes take effect the next time you start Claude Code. If Claude Code is already running, restart it to load the updates.
+                </div>
+
+                <p style="margin: 1rem 0 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
                     Install a specific plugin:
                 </p>
 
-                <div class="code-block">/plugin install hello-world@ai-helpers</div>
+                <div class="code-block" style="margin-bottom: 1rem;">/plugin install git@odh-ai-helpers</div>
 
-                <p style="margin: 1.5rem 0 1rem; color: var(--text-secondary);">
-                    Use a command from the plugin:
+                <p style="margin: 1rem 0 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    Use a plugin command:
                 </p>
 
-                <div class="code-block">/hello-world:echo Hello from OpenDataHub!</div>
+                <div class="code-block" style="margin-bottom: 2rem;">/git:commit-suggest</div>
 
-                <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.875rem;">
-                    For more information, visit the <a href="https://docs.claude.com/en/docs/claude-code" style="color: var(--primary);">Claude Code documentation</a>.
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+
+                <h3 style="margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="background: var(--accent); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Cursor</span>
+                    Installation
+                </h3>
+
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Clone the repository and link Cursor commands:
                 </p>
+
+                <div style="position: relative; margin-bottom: 0.75rem;">
+                    <div class="code-block" style="padding-right: 5rem;">git clone git@github.com:opendatahub-io/ai-helpers.git</div>
+                    <button class="copy-button" onclick="copyToClipboard('git clone git@github.com:opendatahub-io/ai-helpers.git', event)" title="Copy to clipboard">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.75 4.75H10.25V1.75H5.75V4.75ZM5.75 4.75H2.75V14.25H10.25V11.25M5.75 4.75V7.75H13.25V14.25H10.25V11.25M10.25 11.25H13.25V7.75H5.75V4.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="copy-button-text">Copy</span>
+                    </button>
+                </div>
+
+                <div style="position: relative; margin-bottom: 1rem;">
+                    <div class="code-block" style="padding-right: 5rem;">mkdir -p ~/.cursor/commands && cd ai-helpers && ln -sf $(pwd)/cursor/commands/* ~/.cursor/commands/</div>
+                    <button class="copy-button" onclick="copyToClipboard('mkdir -p ~/.cursor/commands && cd ai-helpers && ln -sf $(pwd)/cursor/commands/* ~/.cursor/commands/', event)" title="Copy to clipboard">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.75 4.75H10.25V1.75H5.75V4.75ZM5.75 4.75H2.75V14.25H10.25V11.25M5.75 4.75V7.75H13.25V14.25H10.25V11.25M10.25 11.25H13.25V7.75H5.75V4.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="copy-button-text">Copy</span>
+                    </button>
+                </div>
+
+                <p style="margin: 1rem 0 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    Use a Cursor command:
+                </p>
+
+                <div class="code-block" style="margin-bottom: 1.5rem;">/git:commit-suggest</div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.875rem; flex-wrap: wrap;">
+                    <div>
+                        📖 <a href="https://docs.claude.com/en/docs/claude-code" style="color: var(--primary);">Claude Code Docs</a>
+                    </div>
+                    <div>
+                        📖 <a href="https://cursor.com/docs" style="color: var(--accent);">Cursor Docs</a>
+                    </div>
+                </div>
             `;
-            showModal('How to Install', content);
+            showModal('Installation Instructions', content);
             window.location.hash = 'install';
         }
 
@@ -1280,15 +1879,130 @@
                 if (hash === 'install') {
                     showInstallModal();
                 } else {
-                    const plugin = allPlugins.find(p => p.name === hash);
-                    if (plugin) {
-                        showPluginModal(hash);
+                    // Check for tool-type format: toolname-tooltype
+                    const parts = hash.split('-');
+                    if (parts.length >= 2) {
+                        const toolType = parts[parts.length - 1];
+                        const toolName = parts.slice(0, -1).join('-');
+
+                        if (toolType === 'claude_code' || toolType === 'cursor') {
+                            const tool = allTools.find(t => t.name === toolName && t.tool_type === toolType);
+                            if (tool) {
+                                showPluginModal(toolName, toolType);
+                            }
+                        }
+                    } else {
+                        // Legacy support - try to find any tool with this name
+                        const tool = allTools.find(t => t.name === hash);
+                        if (tool) {
+                            showPluginModal(hash, tool.tool_type);
+                        }
                     }
                 }
             }
         }
 
         window.addEventListener('hashchange', handleHashChange);
+
+        // Visitor tracking functionality
+        function trackVisit() {
+            const domain = window.location.hostname || 'odh-ai-helpers-marketplace.local';
+            const visitorData = {
+                domain: domain,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                page_path: window.location.pathname,
+                page_title: document.title,
+                referrer: document.referrer || '',
+                search_query: window.location.search
+            };
+
+            fetch('https://visitor.6developer.com/visit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(visitorData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.warn('Failed to track visit:', response.status);
+                }
+            })
+            .catch(error => {
+                console.warn('Error tracking visit:', error);
+            });
+        }
+
+        function showVisitorStats() {
+            const modal = document.getElementById('visitor-modal');
+            const modalBody = document.getElementById('visitor-modal-body');
+
+            // Show modal with loading state
+            modal.classList.add('show');
+            modalBody.innerHTML = '<div class="loading-spinner">📊 Loading visit statistics...</div>';
+
+            // Get domain for the request
+            const domain = window.location.hostname || 'odh-ai-helpers-marketplace.local';
+            console.log('Fetching stats for domain:', domain); // Debug logging
+
+            // Fetch visitor statistics
+            fetch(`https://visitor.6developer.com/visit?domain=${encodeURIComponent(domain)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Visitor API Response:', data); // Debug logging
+
+                    // Display statistics
+                    const statsHtml = `
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value-large">${data.totalCount || 'N/A'}</div>
+                                <div class="stat-label-large">Total Visitors</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value-large">${data.todayCount || 'N/A'}</div>
+                                <div class="stat-label-large">Today's Visitors</div>
+                            </div>
+                        </div>
+                    `;
+
+                    modalBody.innerHTML = statsHtml;
+                })
+                .catch(error => {
+                    console.error('Error fetching visitor stats:', error);
+                    modalBody.innerHTML = `
+                        <div class="stats-info">
+                            <h4>❌ Error Loading Statistics</h4>
+                            <p>Unable to fetch visitor statistics at this time.</p>
+                            <p><strong>Domain:</strong> ${domain}</p>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <p>Please try again later or check your internet connection.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function closeVisitorModal(event) {
+            if (!event || event.target.id === 'visitor-modal') {
+                document.getElementById('visitor-modal').classList.remove('show');
+            }
+        }
+
+        // Close visitor modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVisitorModal();
+            }
+        });
+
+        // Track visit when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            trackVisit();
+        });
 
         // Load data on page load
         loadData();

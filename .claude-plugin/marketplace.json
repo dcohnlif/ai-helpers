@@ -1,13 +1,18 @@
 {
-  "name": "ai-helpers",
+  "name": "odh-ai-helpers",
   "owner": {
-    "name": "opendatahub-io"
+    "name": "ODH"
   },
   "plugins": [
     {
       "name": "hello-world",
-      "source": "./plugins/hello-world",
-      "description": "Hello World Plugin"
+      "source": "./claude-plugins/hello-world",
+      "description": "A hello world plugin"
+    },
+    {
+      "name": "utils",
+      "source": "./claude-plugins/utils",
+      "description": "A generic utilities plugin serving as a catch-all for various helper commands and agents"
     }
   ]
 }

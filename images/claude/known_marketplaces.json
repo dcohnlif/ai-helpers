@@ -1,5 +1,5 @@
 {
-  "ai-helpers": {
+  "odh-ai-helpers": {
     "source": {
       "source": "directory",
       "path": "/opt/ai-helpers"
