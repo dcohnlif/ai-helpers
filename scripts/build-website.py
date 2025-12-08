@@ -59,12 +59,19 @@ def get_plugin_commands(
                     f"/{command_name}", f"/{plugin_name}:{command_name}"
                 )
 
+            # Create relative path from repository root for GitHub link
+            base_path = cmd_file.parents[
+                3
+            ]  # Get repo root (three levels up from claude-plugins/plugin/commands)
+            relative_path = cmd_file.relative_to(base_path)
+
             commands.append(
                 {
                     "name": command_name,
                     "description": frontmatter.get("description", ""),
                     "synopsis": synopsis,
                     "argument_hint": frontmatter.get("argument-hint", ""),
+                    "file_path": str(relative_path),
                 }
             )
         except Exception as e:
@@ -94,11 +101,18 @@ def get_plugin_skills(plugin_path: Path) -> List[Dict[str, str]]:
             frontmatter = parse_frontmatter(content)
 
             skill_name = skill_dir.name
+            # Create relative path from repository root for GitHub link
+            base_path = skill_file.parents[
+                4
+            ]  # Get repo root (four levels up from claude-plugins/plugin/skills/skill/SKILL.md)
+            relative_path = skill_file.relative_to(base_path)
+
             skills.append(
                 {
                     "name": frontmatter.get("name", skill_name),
                     "id": skill_name,
                     "description": frontmatter.get("description", ""),
+                    "file_path": str(relative_path),
                 }
             )
         except Exception as e:
@@ -147,6 +161,12 @@ def get_plugin_agents(plugin_path: Path) -> List[Dict[str, str]]:
             frontmatter = parse_frontmatter(content)
 
             agent_name = agent_file.stem
+            # Create relative path from repository root for GitHub link
+            base_path = agent_file.parents[
+                3
+            ]  # Get repo root (three levels up from claude-plugins/plugin/agents)
+            relative_path = agent_file.relative_to(base_path)
+
             agents.append(
                 {
                     "name": frontmatter.get("name", agent_name),
@@ -154,6 +174,7 @@ def get_plugin_agents(plugin_path: Path) -> List[Dict[str, str]]:
                     "description": frontmatter.get("description", ""),
                     "tools": frontmatter.get("tools", ""),
                     "model": frontmatter.get("model", ""),
+                    "file_path": str(relative_path),
                 }
             )
         except Exception as e:
@@ -172,7 +193,9 @@ def get_cursor_commands(cursor_path: Path) -> List[Dict[str, str]]:
 
     for cmd_file in sorted(commands_dir.glob("*.md")):
         try:
-            content = cmd_file.read_text()
+            # Resolve symlinks to get the actual file path
+            resolved_file = cmd_file.resolve()
+            content = resolved_file.read_text()
             frontmatter = parse_frontmatter(content)
             synopsis = extract_synopsis(content)
 
@@ -203,6 +226,42 @@ def get_cursor_commands(cursor_path: Path) -> List[Dict[str, str]]:
             else:
                 cursor_synopsis = f"/{full_command_name}"
 
+            # Create relative path from repository root for GitHub link
+            # Handle both symlinked and regular files
+            try:
+                # Check if this is a symlink that points to somewhere within this repo
+                if cmd_file.is_symlink():
+                    resolved_file = cmd_file.resolve()
+                    # Check if resolved file is within our repo
+                    repo_base = cmd_file.parents[2]  # Should be the repo root
+                    try:
+                        # If the resolved file is within our repo, use its path
+                        if resolved_file.is_relative_to(repo_base):
+                            relative_path = resolved_file.relative_to(repo_base)
+                        else:
+                            # Symlink points outside our repo, use the symlink path itself
+                            relative_path = cmd_file.relative_to(repo_base)
+                    except (ValueError, AttributeError):
+                        # Fallback for older Python versions or path issues
+                        try:
+                            resolved_str = str(resolved_file)
+                            repo_str = str(repo_base)
+                            if resolved_str.startswith(repo_str):
+                                relative_path = resolved_file.relative_to(repo_base)
+                            else:
+                                relative_path = cmd_file.relative_to(repo_base)
+                        except ValueError:
+                            relative_path = Path("cursor") / "commands" / cmd_file.name
+                else:
+                    # Regular file, use normal path
+                    base_path = cmd_file.parents[
+                        2
+                    ]  # Get repo root (two levels up from cursor/commands)
+                    relative_path = cmd_file.relative_to(base_path)
+            except (ValueError, OSError):
+                # Final fallback: construct path assuming standard structure
+                relative_path = Path("cursor") / "commands" / cmd_file.name
+
             commands.append(
                 {
                     "name": display_name,
@@ -210,6 +269,7 @@ def get_cursor_commands(cursor_path: Path) -> List[Dict[str, str]]:
                     "description": frontmatter.get("description", ""),
                     "synopsis": cursor_synopsis,
                     "argument_hint": frontmatter.get("argument-hint", ""),
+                    "file_path": str(relative_path),
                 }
             )
         except Exception as e:
@@ -235,11 +295,15 @@ def get_gemini_gems(gems_dir: Path) -> List[Dict[str, any]]:
 
         for gem in gems_data["gems"]:
             gem_title = gem.get("title", "Untitled Gem")
+            # Get category from gem data, default to "general" if not specified
+            gem_category = gem.get("category", "general")
+
             tools.append(
                 {
                     "name": gem_title.lower().replace(" ", "-"),
                     "display_name": gem_title,
                     "description": gem.get("description", ""),
+                    "category": gem_category,
                     "link": gem.get("link", ""),
                     "commands": [],
                     "skills": [],
@@ -254,18 +318,140 @@ def get_gemini_gems(gems_dir: Path) -> List[Dict[str, any]]:
     return tools
 
 
+def load_categories(base_path: Path) -> Dict:
+    """Load categories configuration"""
+    categories_file = base_path / "categories.json"
+    if categories_file.exists():
+        with open(categories_file) as f:
+            return json.load(f)
+    return {
+        "categories": {
+            "general": {
+                "name": "General",
+                "description": "General-purpose tools and utilities",
+                "claude_plugin_dirs": [],
+                "cursor_commands": [],
+            }
+        }
+    }
+
+
+def update_categories_with_missing_items(
+    categories_data: Dict, marketplace_data: Dict, base_path: Path
+) -> bool:
+    """Update categories.json to include any missing plugins or cursor commands in 'general' category.
+    Returns True if file was updated, False otherwise."""
+
+    # Get all existing categorized items
+    categorized_plugins = set()
+    categorized_commands = set()
+
+    for category_data in categories_data["categories"].values():
+        categorized_plugins.update(category_data.get("claude_plugin_dirs", []))
+        categorized_commands.update(category_data.get("cursor_commands", []))
+
+    # Get all actual plugins from marketplace
+    actual_plugins = {plugin["name"] for plugin in marketplace_data["plugins"]}
+
+    # Get all actual cursor commands
+    actual_commands = set()
+    cursor_path = base_path / "cursor" / "commands"
+    if cursor_path.exists():
+        for cmd_file in cursor_path.glob("*.md"):
+            actual_commands.add(cmd_file.stem)
+
+    # Find missing items
+    missing_plugins = actual_plugins - categorized_plugins
+    missing_commands = actual_commands - categorized_commands
+
+    # If nothing missing, no update needed
+    if not missing_plugins and not missing_commands:
+        return False
+
+    # Ensure general category exists with proper structure
+    if "general" not in categories_data["categories"]:
+        categories_data["categories"]["general"] = {
+            "name": "General",
+            "description": "General-purpose tools and utilities",
+            "claude_plugin_dirs": [],
+            "cursor_commands": [],
+        }
+
+    general_category = categories_data["categories"]["general"]
+
+    # Ensure the arrays exist
+    if "claude_plugin_dirs" not in general_category:
+        general_category["claude_plugin_dirs"] = []
+    if "cursor_commands" not in general_category:
+        general_category["cursor_commands"] = []
+
+    # Add missing plugins and commands to general category
+    if missing_plugins:
+        general_category["claude_plugin_dirs"].extend(sorted(missing_plugins))
+        general_category["claude_plugin_dirs"] = sorted(
+            list(set(general_category["claude_plugin_dirs"]))
+        )
+        print(
+            f"Added {len(missing_plugins)} missing Claude plugins to general category: {', '.join(sorted(missing_plugins))}"
+        )
+
+    if missing_commands:
+        general_category["cursor_commands"].extend(sorted(missing_commands))
+        general_category["cursor_commands"] = sorted(
+            list(set(general_category["cursor_commands"]))
+        )
+        print(
+            f"Added {len(missing_commands)} missing Cursor commands to general category: {', '.join(sorted(missing_commands))}"
+        )
+
+    return True
+
+
+def get_plugin_category(plugin_name: str, categories_data: Dict) -> str:
+    """Determine the category for a Claude plugin based on its directory name"""
+    for category_key, category_data in categories_data["categories"].items():
+        if plugin_name in category_data.get("claude_plugin_dirs", []):
+            return category_key
+    return "general"  # Default category
+
+
+def get_cursor_category(command_name: str, categories_data: Dict) -> str:
+    """Determine the category for a Cursor command based on configuration"""
+    for category_key, category_data in categories_data["categories"].items():
+        cursor_commands = category_data.get("cursor_commands", [])
+        if command_name in cursor_commands:
+            return category_key
+    return "general"  # Default category
+
+
 def build_website_data():
     """Build complete website data structure"""
     # Get repository root (parent of scripts directory)
     base_path = Path(__file__).parent.parent
     marketplace_file = base_path / ".claude-plugin" / "marketplace.json"
+    categories_file = base_path / "categories.json"
 
     with open(marketplace_file) as f:
         marketplace = json.load(f)
 
+    # Load categories configuration
+    categories_data = load_categories(base_path)
+
+    # Update categories with any missing plugins/commands
+    categories_updated = update_categories_with_missing_items(
+        categories_data, marketplace, base_path
+    )
+
+    # Save updated categories back to file if needed
+    if categories_updated:
+        with open(categories_file, "w") as f:
+            json.dump(categories_data, f, indent=2)
+        print(f"Updated {categories_file} with missing items")
+
     website_data = {
         "name": marketplace["name"],
         "owner": marketplace["owner"]["name"],
+        "categories": categories_data,
         "tools": {"claude_code": [], "cursor": [], "gemini": []},
     }
 
@@ -282,9 +468,13 @@ def build_website_data():
         # Read README if exists
         readme_path = plugin_path / "README.md"
 
+        # Determine category for this plugin
+        category = get_plugin_category(plugin_info["name"], categories_data)
+
         plugin_data = {
             "name": plugin_info["name"],
             "description": plugin_info["description"],
+            "category": category,
             "commands": commands,
             "skills": skills,
             "hooks": hooks,
@@ -302,11 +492,15 @@ def build_website_data():
         # Each cursor command becomes an individual tool entry
         for cmd in cursor_commands:
             # Get the full command name from the file (e.g., git-commit-suggest, jira-sprint-summary)
+            # Determine category for this cursor command
+            category = get_cursor_category(cmd["full_command_name"], categories_data)
+
             cursor_tool_data = {
                 "name": cmd[
                     "full_command_name"
                 ],  # This will be added by get_cursor_commands
                 "description": cmd["description"],
+                "category": category,
                 "commands": [cmd],  # Single command per tool
                 "skills": [],
                 "hooks": [],

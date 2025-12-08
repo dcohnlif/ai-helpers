@@ -1,6 +1,6 @@
 # AIPCC Plugin
 
-AI tools for Claude Code that are specialized for AIPCC needs.
+Tools specifically designed for AIPCC workflows and processes.
 
 ## Commands
 

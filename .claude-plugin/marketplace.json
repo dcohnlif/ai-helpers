@@ -7,7 +7,7 @@
     {
       "name": "aipcc",
       "source": "./claude-plugins/aipcc",
-      "description": "AI tools for Claude Code that are specialized for AIPCC needs."
+      "description": "Tools specifically designed for AIPCC workflows and processes"
     },
     {
       "name": "git",

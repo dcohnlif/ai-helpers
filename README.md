@@ -119,6 +119,67 @@ When contributing new commands:
 
 For detailed Claude Code development instructions, see [claude-plugins/README.md](claude-plugins/README.md).
 
+## Categorization System
+
+The AI Helpers marketplace uses a categorization system to organize tools by their intended purpose and workflows. Categories are defined in `categories.json` and automatically applied to tools in the website interface.
+
+### Available Categories
+
+- **General**: Default category for general-purpose tools and utilities
+- **AIPCC**: Tools specifically designed for AIPCC workflows and processes
+
+### How Categorization Works
+
+Categories are configured in the `categories.json` file at the repository root. Each category defines:
+- `name`: Display name for the category
+- `description`: Brief description of the category's purpose
+- `claude_plugin_dirs`: List of Claude Code plugin directory names that belong to this category
+- `cursor_commands`: List of Cursor command names that belong to this category
+
+Example category definition:
+```json
+{
+  "categories": {
+    "general": {
+      "name": "General",
+      "description": "General-purpose tools and utilities",
+      "claude_plugin_dirs": ["git", "utils", "python-packaging"],
+      "cursor_commands": ["jira-sprint-summary"]
+    }
+  }
+}
+```
+
+### Adding a New Category
+
+To add a new category:
+
+1. **Edit `categories.json`**: Add your new category definition
+   ```json
+   "your-category": {
+     "name": "Your Category Name",
+     "description": "Description of your category's purpose",
+     "claude_plugin_dirs": ["plugin1", "plugin2"],
+     "cursor_commands": ["command1", "command2"]
+   }
+   ```
+
+2. **Assign tools to the category**:
+   - For Claude Code plugins: Add the plugin directory name to `claude_plugin_dirs`
+   - For Cursor commands: Add the command name (without .md extension) to `cursor_commands`
+   - For Gemini Gems: Categories are automatically applied based on YAML metadata
+
+3. **Update documentation**: Run `make update` to regenerate the website data
+
+### Automatic Categorization
+
+The build system automatically:
+- Assigns uncategorized tools to the "general" category
+- Updates `categories.json` during `make update` to include any new tools
+- Preserves manual categorizations while ensuring no tools are left uncategorized
+
+This ensures zero maintenance burden for new tools while preserving intentional categorizations.
+
 ## Cursor
 
 The `cursor/` directory contains custom commands and functionalities specifically designed for Cursor AI integration.

@@ -31,7 +31,7 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 
 ### Aipcc Claude Code Tool
 
-AI tools for Claude Code that are specialized for AIPCC needs.
+Tools specifically designed for AIPCC workflows and processes
 
 **Commands:**
 - **`/aipcc:commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
@@ -169,7 +169,7 @@ My purpose is to help you generate well-structured Architecture Decision Records
 
 ### Technical Spike & Investigation
 
-My purpose is to help an engineer conduct a technical spike for a new feature, library, initiative, or component. Note: gems don’t have access to deep research so if you need the Spike to perform some research on the Internet, you’ll not want to use this Gem and use regular chat sessions.
+My purpose is to help an engineer conduct a technical spike for a new feature, library, initiative, or component. Note: gems don't have access to deep research so if you need the Spike to perform some research on the Internet, you'll not want to use this Gem and use regular chat sessions.
 
 **🔗 [Open Technical Spike & Investigation](https://gemini.google.com/gem/1PAt1u0cEtMbzqjl3Kp3TAzaUft3qrkXw?usp=sharing)**
 
