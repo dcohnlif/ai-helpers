@@ -1,0 +1,8 @@
+{
+  "name": "aipcc",
+  "description": "Tools specifically designed for AIPCC workflows and processes",
+  "version": "1.0.0",
+  "author": {
+    "name": "AI Helpers Marketplace"
+  }
+}

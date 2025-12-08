@@ -34,6 +34,15 @@ lint: ## Run plugin linter, ruff syntax checker and formatter, and shellcheck
 		echo "shellcheck not found, skipping shell script linting. Install with: dnf install ShellCheck"; \
 		exit 1; \
 	fi
+	@echo "Checking that 'make update' doesn't generate uncommitted changes..."
+	@$(MAKE) update
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "Error: 'make update' generated uncommitted changes. Please commit these changes:"; \
+		git status --porcelain; \
+		exit 1; \
+	else \
+		echo "✓ No uncommitted changes after 'make update'"; \
+	fi
 
 .PHONY: update
 update: ## Update plugin documentation, Claude settings, and website data

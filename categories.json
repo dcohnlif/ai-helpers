@@ -1,0 +1,41 @@
+{
+  "categories": {
+    "general": {
+      "name": "General",
+      "description": "General-purpose tools and utilities",
+      "claude_plugin_dirs": [
+        "git",
+        "gitlab",
+        "jira",
+        "konflux",
+        "python-packaging",
+        "rpm",
+        "utils"
+      ],
+      "cursor_commands": [
+        "jira-sprint-summary",
+        "konflux-application",
+        "konflux-component",
+        "rpm-examine"
+      ],
+      "gemini_gems": [
+        "Email Copilot",
+        "Technical Spike & Investigation"
+      ]
+    },
+    "aipcc": {
+      "name": "AIPCC",
+      "description": "Tools specifically designed for AIPCC workflows and processes",
+      "claude_plugin_dirs": [
+        "aipcc"
+      ],
+      "cursor_commands": [
+        "aipcc-commit-suggest"
+      ],
+      "gemini_gems": [
+        "Commit Message Assistant",
+        "AIPCC ADR Assistant"
+      ]
+    }
+  }
+}

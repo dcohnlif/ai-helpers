@@ -4,12 +4,12 @@ argument-hint: [N]
 ---
 
 ## Name
-git:aipcc-commit-suggest
+aipcc:commit-suggest
 
 ## Synopsis
 ```
-/git:aipcc-commit-suggest       # Analyze staged changes
-/git:aipcc-commit-suggest [N]     # Analyze last N commits (1-100)
+/aipcc:commit-suggest       # Analyze staged changes
+/aipcc:commit-suggest [N]     # Analyze last N commits (1-100)
 ```
 
 ## Description
@@ -24,7 +24,7 @@ AI-powered command that analyzes code changes and generates commit messages foll
 - Improve or rewrite existing commits to meet project standards
 - Generate squash messages for MR merges
 
-**Difference from `/git:summary`** – That command is read-only, while `git:aipcc-commit-suggest` generates actionable commit message suggestions for user review and manual use.
+**Difference from `/git:summary`** – That command is read-only, while `aipcc:commit-suggest` generates actionable commit message suggestions for user review and manual use.
 
 ## Implementation
 
@@ -55,13 +55,13 @@ The command operates in two modes based on input:
 ```bash
 # Generate message for staged files
 git add src/auth.ts src/middleware.ts
-/git:aipcc-commit-suggest
+/aipcc:commit-suggest
 
 # Rewrite last commit message
-/git:aipcc-commit-suggest 1
+/aipcc:commit-suggest 1
 
 # Summarize last 5 commits for squash
-/git:aipcc-commit-suggest 5
+/aipcc:commit-suggest 5
 ```
 
 ## Return Value

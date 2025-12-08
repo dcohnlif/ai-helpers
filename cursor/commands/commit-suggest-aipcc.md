@@ -1,1 +1,0 @@
-../../claude-plugins/git/commands/aipcc-commit-suggest.md

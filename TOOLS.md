@@ -4,9 +4,9 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 
 ## Claude Code Tools
 
+- [Aipcc](#aipcc-claude-code-tool)
 - [Git](#git-claude-code-tool)
 - [Gitlab](#gitlab-claude-code-tool)
-- [Hello World](#hello-world-claude-code-tool)
 - [Jira](#jira-claude-code-tool)
 - [Konflux](#konflux-claude-code-tool)
 - [Python Packaging](#python-packaging-claude-code-tool)
@@ -15,7 +15,7 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 
 ## Cursor Tools
 
-- [Commit](#commit-cursor-tool)
+- [Aipcc](#aipcc-cursor-tool)
 - [Jira](#jira-cursor-tool)
 - [Konflux](#konflux-cursor-tool)
 - [Rpm](#rpm-cursor-tool)
@@ -29,12 +29,18 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 
 ## Claude Code Tools
 
+### Aipcc Claude Code Tool
+
+Tools specifically designed for AIPCC workflows and processes
+
+**Commands:**
+- **`/aipcc:commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
+
+See [claude-plugins/aipcc/README.md](claude-plugins/aipcc/README.md) for detailed documentation.
+
 ### Git Claude Code Tool
 
 Git workflow automation and utilities
-
-**Commands:**
-- **`/git:aipcc-commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
 
 **Skills:**
 - **shallow-clone** - Perform a shallow clone of a Git repository to a temporary location.
@@ -49,15 +55,6 @@ Tools and skills for interacting with GitLab resources
 - **pipeline-debugger** - Debug and monitor GitLab CI/CD pipelines for merge requests. Check pipeline status, view job logs, and troubleshoot CI failures. Use this when the user needs to investigate GitLab CI pipeline issues, check job statuses, or view specific job logs.
 
 See [claude-plugins/gitlab/README.md](claude-plugins/gitlab/README.md) for detailed documentation.
-
-### Hello World Claude Code Tool
-
-A hello world plugin
-
-**Commands:**
-- **`/hello-world:echo` `[name]`** - Hello world plugin implementation
-
-See [claude-plugins/hello-world/README.md](claude-plugins/hello-world/README.md) for detailed documentation.
 
 ### Jira Claude Code Tool
 
@@ -117,12 +114,12 @@ See [claude-plugins/utils/README.md](claude-plugins/utils/README.md) for detaile
 
 ## Cursor Tools
 
-### Commit Cursor Tool
+### Aipcc Cursor Tool
 
-Commit workflow automation for Cursor AI integration
+Aipcc workflow automation for Cursor AI integration
 
 **Commands:**
-- **`/commit-suggest-aipcc` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
+- **`/aipcc-commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
 
 See [cursor/README.md](cursor/README.md) for installation and usage instructions.
 
@@ -172,7 +169,7 @@ My purpose is to help you generate well-structured Architecture Decision Records
 
 ### Technical Spike & Investigation
 
-My purpose is to help an engineer conduct a technical spike for a new feature, library, initiative, or component. Note: gems don’t have access to deep research so if you need the Spike to perform some research on the Internet, you’ll not want to use this Gem and use regular chat sessions.
+My purpose is to help an engineer conduct a technical spike for a new feature, library, initiative, or component. Note: gems don't have access to deep research so if you need the Spike to perform some research on the Internet, you'll not want to use this Gem and use regular chat sessions.
 
 **🔗 [Open Technical Spike & Investigation](https://gemini.google.com/gem/1PAt1u0cEtMbzqjl3Kp3TAzaUft3qrkXw?usp=sharing)**
 

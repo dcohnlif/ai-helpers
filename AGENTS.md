@@ -53,6 +53,66 @@ Gemini Gems are specialized AI assistants created within Google's Gemini platfor
    - Update relevant documentation
    - Submit a merge request with your changes
 
+## Categorization System
+
+The marketplace uses a categorization system to organize tools by their intended purpose and workflows. This helps users discover relevant tools and maintains a well-structured tool collection.
+
+### How Categories Work
+
+Categories are defined in `categories.json` at the repository root and automatically applied to tools:
+
+- **Claude Code plugins**: Categorized by plugin directory name
+- **Cursor commands**: Categorized by command filename (without .md extension)
+- **Gemini Gems**: Categorized by gem title in categories.json
+
+### Current Categories
+
+- **General**: Default category for general-purpose tools and utilities
+- **AIPCC**: Tools specifically designed for AIPCC workflows and processes
+
+### Adding a New Category
+
+When you have multiple related tools that form a cohesive workflow or domain, consider creating a new category:
+
+1. **Edit categories.json**: Add your category definition with clear name and description
+   ```json
+   {
+     "categories": {
+       "your-category": {
+         "name": "Your Category Name",
+         "description": "Clear description of the category's purpose and scope",
+         "claude_plugin_dirs": ["plugin1", "plugin2"],
+         "cursor_commands": ["command1", "command2"]
+       }
+     }
+   }
+   ```
+
+2. **Assign existing tools**: Move relevant tools from other categories to your new category
+
+3. **Update documentation**: Run `make update` to regenerate the website and tool documentation
+
+### Category Guidelines
+
+**When to create a new category:**
+- You have 3+ related tools that share a common domain or workflow
+- The tools serve a specific user group or use case
+- The category provides clear value for tool discovery
+
+**Category naming:**
+- Use lowercase with hyphens for category keys (e.g., "data-science")
+- Use clear, descriptive names for display (e.g., "Data Science")
+- Write concise descriptions that explain the category's scope
+
+### Automatic Management
+
+The build system automatically handles categorization maintenance:
+- New tools are assigned to "general" if not explicitly categorized
+- Categories.json is updated during `make update` to include new tools
+- Manual categorizations are preserved across updates
+
+This ensures all tools are categorized without requiring manual maintenance.
+
 ## Ethical Guidelines
 
 **Critical Requirement**: Never reference real people by name in plugins, commands, or examples.
