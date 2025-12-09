@@ -86,19 +86,22 @@ Edit `scripts/generate_transcript.py` to:
 
 ## Troubleshooting
 
-**"slackdump not found"**
+### "slackdump not found"
+
 ```bash
 # Install slackdump
 brew install slackdump  # macOS
 # or download from https://github.com/rusq/slackdump
 ```
 
-**"Not authenticated"**
+### "Not authenticated"
+
 ```bash
 slackdump workspace add
 ```
 
-**"No users.json"**
+### "No users.json"
+
 - slackdump export command generates this automatically
 - Check that export completed successfully
 

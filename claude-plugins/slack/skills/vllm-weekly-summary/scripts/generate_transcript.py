@@ -38,10 +38,81 @@ from glob import glob
 from typing import List, Dict, Any
 
 
+# Security validation patterns
+# Slack channel IDs: alphanumeric, typically start with C, D, G, or U
+CHANNEL_ID_PATTERN = re.compile(r'^[A-Z][A-Z0-9]{8,}$')
+# Dangerous characters for paths: shell metacharacters, control chars, newlines
+UNSAFE_PATH_PATTERN = re.compile(r'[;\n\r\0`$|&<>\'\"\\]')
+
+
+def validate_channel_id(channel_id: str) -> str:
+    """Validate and normalize a Slack channel ID.
+
+    Args:
+        channel_id: The channel ID to validate
+
+    Returns:
+        The validated channel ID (uppercase)
+
+    Raises:
+        ValueError: If the channel ID is invalid
+    """
+    if not channel_id:
+        raise ValueError("Channel ID cannot be empty")
+
+    # Normalize to uppercase
+    channel_id = channel_id.strip().upper()
+
+    if not CHANNEL_ID_PATTERN.match(channel_id):
+        raise ValueError(
+            f"Invalid channel ID format: '{channel_id}'. "
+            "Channel IDs should be alphanumeric, start with a letter (C, D, G, U), "
+            "and be at least 9 characters long (e.g., 'C07R5PAL2L9')."
+        )
+
+    return channel_id
+
+
+def validate_output_dir(output_dir: str) -> str:
+    """Validate and normalize an output directory path.
+
+    Args:
+        output_dir: The output directory path to validate
+
+    Returns:
+        The validated output directory path
+
+    Raises:
+        ValueError: If the path contains unsafe characters
+    """
+    if not output_dir:
+        raise ValueError("Output directory cannot be empty")
+
+    output_dir = output_dir.strip()
+
+    # Check for dangerous characters
+    if UNSAFE_PATH_PATTERN.search(output_dir):
+        raise ValueError(
+            f"Output directory contains unsafe characters: '{output_dir}'. "
+            "Paths cannot contain: ; \\ ` $ | & < > ' \" or control characters."
+        )
+
+    # Check for null bytes (can bypass security checks)
+    if '\x00' in output_dir:
+        raise ValueError("Output directory cannot contain null bytes")
+
+    return output_dir
+
+
 def run_command(cmd, description):
-    """Run a shell command and handle errors."""
+    """Run a command and handle errors.
+
+    Args:
+        cmd: List of command arguments (e.g., ['slackdump', 'export', '-o', 'dir'])
+        description: Human-readable description for status messages
+    """
     print(f"📋 {description}...")
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"❌ Error: {description} failed")
         print(f"STDERR: {result.stderr}")
@@ -57,14 +128,14 @@ def export_slack_messages(channel_id, days_back, output_dir):
     time_from = start_date.strftime('%Y-%m-%dT00:00:00')
     time_to = end_date.strftime('%Y-%m-%dT23:59:59')
 
-    cmd = (
-        f'slackdump export '
-        f'-time-from {time_from} '
-        f'-time-to {time_to} '
-        f'-type standard '
-        f'-o {output_dir} '
-        f'{channel_id}'
-    )
+    cmd = [
+        'slackdump', 'export',
+        '-time-from', time_from,
+        '-time-to', time_to,
+        '-type', 'standard',
+        '-o', str(output_dir),
+        channel_id
+    ]
 
     run_command(cmd, f"Exporting Slack messages from {start_date.date()} to {end_date.date()}")
     return output_dir
@@ -360,19 +431,27 @@ def main():
 
     args = parser.parse_args()
 
+    # Validate inputs before use
+    try:
+        channel_id = validate_channel_id(args.channel)
+        output_dir_str = validate_output_dir(args.output_dir)
+    except ValueError as e:
+        print(f"❌ Input validation error: {e}")
+        sys.exit(1)
+
     print("=" * 60)
     print("vLLM Weekly Summary Generator for RHAIIS Team")
     print("=" * 60)
 
     # Create output directory
-    output_dir = Path(args.output_dir)
+    output_dir = Path(output_dir_str)
     output_dir.mkdir(exist_ok=True)
 
     export_dir = output_dir / "slack_export"
     transcript_file = output_dir / "transcript.md"
 
     # Step 1: Export Slack messages
-    export_slack_messages(args.channel, args.days, str(export_dir))
+    export_slack_messages(channel_id, args.days, str(export_dir))
 
     # Step 2: Convert to transcript (now calling functions directly)
     convert_to_transcript(str(export_dir), "vLLM CI SIG", str(transcript_file))

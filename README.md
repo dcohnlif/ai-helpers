@@ -106,6 +106,13 @@ This repository is made for collaboration. We highly welcome contributions.
 For Claude plugins, check out the `claude-plugins/` directory for examples.
 Make sure your commands and agents follow the conventions for the Sections structure presented in the hello-world reference implementation plugin (see [`hello-world:echo`](claude-plugins/hello-world/commands/echo.md) for an example). Using Claude Code itself to develop the plugins is highly encouraged.
 
+### Adding local plugin to session to be able to test
+
+1. open `claude`
+2. run `/plugin marketplace add ./`
+3. run `/plugin` then install the local plugin
+4. test plugin
+
 ### Adding New Commands
 
 When contributing new commands:

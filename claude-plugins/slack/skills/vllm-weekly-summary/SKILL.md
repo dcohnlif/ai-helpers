@@ -42,7 +42,7 @@ The skill performs three main steps:
 
 ### Required Tools
 - **slackdump** - Must be installed and authenticated with vLLM workspace
-  - Installation: See https://github.com/rusq/slackdump
+  - Installation: See [slackdump](https://github.com/rusq/slackdump)
   - Authentication: Run `slackdump workspace add` first
 
 ### Environment Setup
