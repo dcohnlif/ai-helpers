@@ -133,15 +133,14 @@ When summarizing the transcript, consider:
 
 ## Example Workflow
 
-```bash
-# 1. Run the skill to generate transcript
-.claude/skills/vllm-weekly-summary/scripts/generate_transcript.py --days 7
-
-# 2. The skill outputs the transcript and context
-# 3. Claude analyzes the transcript and provides structured summary
-# 4. Summary is automatically saved to weekly_summary_YYYY-MM-DD_to_YYYY-MM-DD.md
-# 5. Review and distribute the summary file to the RHAIIS team
-```
+1. Run the skill to generate transcript:
+   ```bash
+   ./scripts/generate_transcript.py --days 7
+   ```
+2. The skill outputs the transcript and context.
+3. Claude analyzes the transcript and provides a structured summary.
+4. The summary is automatically saved to `weekly_summary_YYYY-MM-DD_to_YYYY-MM-DD.md`.
+5. Review and distribute the summary file to the RHAIIS team.
 
 ## Customization Options
 
