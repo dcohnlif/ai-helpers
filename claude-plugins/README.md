@@ -80,6 +80,32 @@ When creating Python scripts that require external dependencies (beyond the stan
 
 **Create new plugin when**: 3+ related components, shared domain/theme, needs supporting files
 
+## Including External Plugins
+
+To include plugins from other repositories without copying them locally, add them to `claude-external-plugin-sources.json` in the repository root:
+
+```json
+{
+  "version": "1.0",
+  "plugins": [
+    {
+      "name": "my-plugin",
+      "description": "Description of the plugin",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/org/plugin-repo.git"
+      }
+    }
+  ]
+}
+```
+
+Optional fields: `ref` (branch/tag), `path` (subdirectory within repo)
+
+> **Note:** Use HTTPS URLs rather than the `github` source type, as the latter requires SSH keys which may not be available in container environments.
+
+Run `make update` after adding external plugins to regenerate the marketplace.
+
 ## Reference Examples
 
 - **Commands**: `hello-world/commands/echo.md`
