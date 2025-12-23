@@ -68,4 +68,3 @@ build: ## Build Claude container image using Containerfile
 container-build: build ## Alias for build target
 
 .DEFAULT_GOAL := help
-

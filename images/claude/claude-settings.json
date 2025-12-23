@@ -17,6 +17,7 @@
     "python-packaging@odh-ai-helpers": true,
     "rpm@odh-ai-helpers": true,
     "utils@odh-ai-helpers": true,
-    "vllm@odh-ai-helpers": true
+    "vllm@odh-ai-helpers": true,
+    "fips-compliance-checker@odh-ai-helpers": true
   }
 }

@@ -7,6 +7,7 @@
         "name": "General",
         "description": "General-purpose tools and utilities",
         "claude_plugin_dirs": [
+          "fips-compliance-checker",
           "git",
           "gitlab",
           "hello-world",
@@ -275,6 +276,21 @@
         "hooks": [],
         "agents": [],
         "has_readme": true
+      },
+      {
+        "name": "fips-compliance-checker",
+        "description": "Plugin to scan for FIPS compliance",
+        "category": "general",
+        "commands": [],
+        "skills": [],
+        "hooks": [],
+        "agents": [],
+        "has_readme": false,
+        "external": true,
+        "source": {
+          "source": "url",
+          "url": "https://github.com/grdryn/fips-compliance-checker-claude-code-plugin.git"
+        }
       }
     ],
     "cursor": [
