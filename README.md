@@ -11,8 +11,8 @@ This repository is a collaborative place hosting collections of AI plugins to au
 
 ## Got an Idea?
 
-Have an idea for a new plugin, command, or assistant but not sure how to implement it? We'd love to hear about it!Simply
-file a GitHub issue with your idea in the title and we'll work together to make it happen.
+Have an idea for a new plugin, command, or assistant but not sure how to implement it? We'd love to hear about it!
+Simply file a GitHub issue with your idea in the title and we'll work together to make it happen.
 
 > [!TIP]
 > [Share your idea](https://github.com/opendatahub-io/ai-helpers/issues/new?assignees=&labels=enhancement%2Chelp+wanted%2Cidea&template=07_idea_request.md&title=%5BIdea%5D+)
@@ -102,12 +102,12 @@ podman run -it \
   SELinux labeling)
 - `-v $(pwd):/workspace:z` - Mounts your current directory into the container
 
-### Running Commands Non-Interactively
+#### Running Commands Non-Interactively
 
 You can execute Claude Code commands directly without entering an interactive session using the `-p` or `--print` flag:
 
 ```bash
-podman run -it \
+podman run -it --rm \
   --pull always \
   --userns=keep-id \
   -e CLAUDE_CODE_USE_VERTEX=1 \
@@ -122,9 +122,66 @@ podman run -it \
 ```
 
 This will:
+
 1. Start the container with your gcloud credentials
 2. Execute the `/hello-world:echo` command with the provided message
 3. Print the response and exit when complete
+
+#### Using Local Claude Sessions and History
+
+By default, the container uses an isolated Claude configuration, so your local sessions and history are not
+available. To reuse your existing Claude Code sessions inside the container, mount your Claude configuration
+and project at their real paths:
+
+```bash
+podman run -it --rm \
+  --pull always \
+  --userns=keep-id \
+  -e CLAUDE_CODE_USE_VERTEX=1 \
+  -e CLOUD_ML_REGION=your-ml-region \
+  -e ANTHROPIC_VERTEX_PROJECT_ID=your-project-id \
+  -e DISABLE_AUTOUPDATER=1 \
+  -v ~/.config/gcloud:/home/claude/.config/gcloud:ro,z \
+  -v ~/.claude:/home/claude/.claude:z \
+  -v ~/.claude.json:/home/claude/.claude.json:z \
+  -v $(pwd):$(pwd):z \
+  -w $(pwd) \
+  ghcr.io/opendatahub-io/ai-helpers:latest
+```
+
+**Volume Mounts:**
+
+- `-v ~/.claude:/home/claude/.claude:z` - Mounts your local Claude sessions and project data
+- `-v ~/.claude.json:/home/claude/.claude.json:z` - Mounts your user configuration (onboarding state, preferences)
+- `-v $(pwd):$(pwd):z` - Mounts the project at the same absolute path as on the host to reuse Claude's session data
+- `-w $(pwd)` - Sets the working directory to match the host path
+
+This works because Claude Code uses the project path to identify sessions. By mounting at the real path, the
+container sees the same path as your local Claude Code and uses the same session data.
+
+**Convenience wrapper function:**
+
+Add this to your `~/.bashrc` for easy launching of the container:
+
+```bash
+claude-container() {
+  podman run -it --rm \
+    --pull always \
+    --userns=keep-id \
+    -e CLAUDE_CODE_USE_VERTEX=1 \
+    -e CLOUD_ML_REGION="${CLOUD_ML_REGION}" \
+    -e ANTHROPIC_VERTEX_PROJECT_ID="${ANTHROPIC_VERTEX_PROJECT_ID}" \
+    -e DISABLE_AUTOUPDATER=1 \
+    -v ~/.config/gcloud:/home/claude/.config/gcloud:ro,z \
+    -v ~/.claude:/home/claude/.claude:z \
+    -v ~/.claude.json:/home/claude/.claude.json:z \
+    -v "$(pwd):$(pwd):z" \
+    -w "$(pwd)" \
+    ghcr.io/opendatahub-io/ai-helpers:latest "$@"
+}
+```
+
+Then run `claude-container` from any project directory to use the containerized Claude Code with your existing sessions.
 
 ### Plugin Development
 
