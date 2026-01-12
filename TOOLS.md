@@ -28,6 +28,7 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 - [Aipcc Adr Assistant](#aipcc-adr-assistant-gemini-gems)
 - [Technical Spike & Investigation](#technical-spike-&-investigation-gemini-gems)
 - [Email Copilot](#email-copilot-gemini-gems)
+- [Tl;Dev](#tl;dev-gemini-gems)
 
 ## Claude Code Tools
 
@@ -198,5 +199,11 @@ My purpose is to help an engineer conduct a technical spike for a new feature, l
 My purpose is to take your minimal, raw notes and expand them into complete, polished email drafts, acting as your thought partner.
 
 **🔗 [Open Email Copilot](https://gemini.google.com/gem/1P0wg_pwCga6YDVKfd3enWY1CRh2EzuXI?usp=sharing)**
+
+### Tl;Dev
+
+We are drowning in a sea of open tabs. Every day, we skip potentially game-changing articles simply because we don't have the time to vet them. This Gem acts as your technical filter, ensuring you never miss a critical insight just because the signal was lost in the noise.
+
+**🔗 [Open Tl;Dev](https://gemini.google.com/gem/1vi4as7sXcljjj0nFwq0rXGYdLl0NJ-7g?usp=sharing)**
 
 See [gemini-gems/README.md](gemini-gems/README.md) for more information about Gemini Gems and how to contribute.
