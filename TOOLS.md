@@ -37,6 +37,7 @@ This document lists all available Claude Code tools, Cursor tools, and Gemini Ge
 Tools specifically designed for AIPCC workflows and processes
 
 **Commands:**
+
 - **`/aipcc:commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
 
 See [claude-plugins/aipcc/README.md](claude-plugins/aipcc/README.md) for detailed documentation.
@@ -46,6 +47,7 @@ See [claude-plugins/aipcc/README.md](claude-plugins/aipcc/README.md) for detaile
 Git workflow automation and utilities
 
 **Skills:**
+
 - **shallow-clone** - Perform a shallow clone of a Git repository to a temporary location.
 
 See [claude-plugins/git/README.md](claude-plugins/git/README.md) for detailed documentation.
@@ -55,6 +57,7 @@ See [claude-plugins/git/README.md](claude-plugins/git/README.md) for detailed do
 Tools and skills for interacting with GitLab resources
 
 **Skills:**
+
 - **pipeline-debugger** - Debug and monitor GitLab CI/CD pipelines for merge requests. Check pipeline status, view job logs, and troubleshoot CI failures. Use this when the user needs to investigate GitLab CI pipeline issues, check job statuses, or view specific job logs.
 
 See [claude-plugins/gitlab/README.md](claude-plugins/gitlab/README.md) for detailed documentation.
@@ -64,6 +67,7 @@ See [claude-plugins/gitlab/README.md](claude-plugins/gitlab/README.md) for detai
 A hello world plugin
 
 **Commands:**
+
 - **`/hello-world:echo` `[name]`** - Hello world plugin implementation
 
 See [claude-plugins/hello-world/README.md](claude-plugins/hello-world/README.md) for detailed documentation.
@@ -73,9 +77,11 @@ See [claude-plugins/hello-world/README.md](claude-plugins/hello-world/README.md)
 Jira workflow automation and utilities
 
 **Commands:**
+
 - **`/jira:sprint-summary` `<sprint-name> [options]`** - Generate comprehensive sprint summaries by analyzing JIRA sprint data, including issue breakdown, progress metrics, and team performance insights.
 
 **Skills:**
+
 - **upload-chat-log** - Export and upload the current chat conversation as a markdown file attachment to a JIRA ticket for later review and documentation.
 
 See [claude-plugins/jira/README.md](claude-plugins/jira/README.md) for detailed documentation.
@@ -85,6 +91,7 @@ See [claude-plugins/jira/README.md](claude-plugins/jira/README.md) for detailed 
 A plugin to analyze and trigger Konflux builds
 
 **Commands:**
+
 - **`/konflux:application` `<subcommand> [args]`** - Manage Konflux application
 - **`/konflux:component` `<subcommand> [args]`** - Manage Konflux component
 
@@ -95,6 +102,7 @@ See [claude-plugins/konflux/README.md](claude-plugins/konflux/README.md) for det
 Tools and skills for Python package management
 
 **Skills:**
+
 - **complexity** - Analyze Python package build complexity by inspecting PyPI metadata. Evaluates compilation requirements, dependencies, distribution types, and provides recommendations for wheel building strategies.
 - **env-finder** - Investigate environment variables that can be set when building Python wheels for a given project. Analyzes setup.py, CMake files, and other build configuration files to discover customizable build environment variables.
 - **license-checker** - Assess license compatibility for Python package redistribution using SPDX.org license database. Evaluates whether a given license allows building and distributing wheels, with real-time license information lookup.
@@ -102,6 +110,7 @@ Tools and skills for Python package management
 - **source-finder** - Locate source code repositories for Python packages by analyzing PyPI metadata, project URLs, and code hosting platforms like GitHub, GitLab, and Bitbucket. Provides deterministic results with confidence levels.
 
 **Agents:**
+
 - **python-packaging-investigator** - Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity. Provides comprehensive guidance on how packages can be built from source using integrated analysis skills. (Tools: Bash, Read, Grep, Glob, WebFetch, Skill) (Model: sonnet)
 
 See [claude-plugins/python-packaging/README.md](claude-plugins/python-packaging/README.md) for detailed documentation.
@@ -111,6 +120,7 @@ See [claude-plugins/python-packaging/README.md](claude-plugins/python-packaging/
 Tools for working with RPMs
 
 **Commands:**
+
 - **`/rpm:examine` `[copr-chroot-url] OR [build-log-url] [srpm-url] OR [build.log] [specfile|dist-git] [sources]`** - Analyze RPM build.log failures
 
 See [claude-plugins/rpm/README.md](claude-plugins/rpm/README.md) for detailed documentation.
@@ -120,6 +130,7 @@ See [claude-plugins/rpm/README.md](claude-plugins/rpm/README.md) for detailed do
 A generic utilities plugin serving as a catch-all for various helper commands and agents
 
 **Commands:**
+
 - **`/utils:placeholder`** - Placeholder command for the utils plugin
 
 See [claude-plugins/utils/README.md](claude-plugins/utils/README.md) for detailed documentation.
@@ -129,6 +140,7 @@ See [claude-plugins/utils/README.md](claude-plugins/utils/README.md) for detaile
 vLLM plugin
 
 **Skills:**
+
 - **vLLM Slack Summary** - Generate slack summaries of vLLM CI SIG Slack channel activity for the RHAIIS midstream release team
 
 See [claude-plugins/vllm/README.md](claude-plugins/vllm/README.md) for detailed documentation.
@@ -140,6 +152,7 @@ See [claude-plugins/vllm/README.md](claude-plugins/vllm/README.md) for detailed 
 Aipcc workflow automation for Cursor AI integration
 
 **Commands:**
+
 - **`/aipcc-commit-suggest` `[N]`** - Generate AIPCC Commits style commit messages or summarize existing commits
 
 See [cursor/README.md](cursor/README.md) for installation and usage instructions.
@@ -149,6 +162,7 @@ See [cursor/README.md](cursor/README.md) for installation and usage instructions
 Jira workflow automation for Cursor AI integration
 
 **Commands:**
+
 - **`/jira-sprint-summary` `<sprint-name> [options]`** - Generate comprehensive sprint summaries by analyzing JIRA sprint data, including issue breakdown, progress metrics, and team performance insights.
 
 See [cursor/README.md](cursor/README.md) for installation and usage instructions.
@@ -158,6 +172,7 @@ See [cursor/README.md](cursor/README.md) for installation and usage instructions
 Konflux workflow automation for Cursor AI integration
 
 **Commands:**
+
 - **`/konflux-application` `<subcommand> [args]`** - Manage Konflux application
 - **`/konflux-component` `<subcommand> [args]`** - Manage Konflux component
 
@@ -168,6 +183,7 @@ See [cursor/README.md](cursor/README.md) for installation and usage instructions
 Rpm workflow automation for Cursor AI integration
 
 **Commands:**
+
 - **`/rpm-examine` `[copr-chroot-url] OR [build-log-url] [srpm-url] OR [build.log] [specfile|dist-git] [sources]`** - Analyze RPM build.log failures
 
 See [cursor/README.md](cursor/README.md) for installation and usage instructions.
@@ -202,7 +218,7 @@ My purpose is to take your minimal, raw notes and expand them into complete, pol
 
 ### Tl;Dev
 
-We are drowning in a sea of open tabs. Every day, we skip potentially game-changing articles simply because we don't have the time to vet them. This Gem acts as your technical filter, ensuring you never miss a critical insight just because the signal was lost in the noise.
+My purpose is to act as your technical article filter. Provide a URL, and I will generate a concise TL;DR summary for you. I first determine if the content is technical. If not, I will reply only with "Content is not relevant to software development."
 
 **🔗 [Open Tl;Dev](https://gemini.google.com/gem/1vi4as7sXcljjj0nFwq0rXGYdLl0NJ-7g?usp=sharing)**
 

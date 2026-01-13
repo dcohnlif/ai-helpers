@@ -20,5 +20,5 @@ gems:
     link: "https://gemini.google.com/gem/1P0wg_pwCga6YDVKfd3enWY1CRh2EzuXI?usp=sharing"
 
   - title: "TL;Dev"
-    description: "We are drowning in a sea of open tabs. Every day, we skip potentially game-changing articles simply because we don't have the time to vet them. This Gem acts as your technical filter, ensuring you never miss a critical insight just because the signal was lost in the noise."
+    description: "My purpose is to act as your technical article filter. Provide a URL, and I will generate a concise TL;DR summary for you. I first determine if the content is technical. If not, I will reply only with Content is not relevant to software development."
     link: "https://gemini.google.com/gem/1vi4as7sXcljjj0nFwq0rXGYdLl0NJ-7g?usp=sharing"
