@@ -4,7 +4,6 @@ FROM quay.io/fedora/fedora:latest
 RUN dnf install -y nodejs \
 	npm \
     python3 \
-    python3-pip \
     python3-devel \
     fedora-packager \
     fedora-review \
@@ -13,6 +12,8 @@ RUN dnf install -y nodejs \
     rpmdevtools \
     curl \
     git \
+    make \
+    shellcheck \
     && dnf clean all
 
 # Install Claude Code CLI globally
@@ -26,10 +27,13 @@ RUN curl -LsSf https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/
     && chmod +x /usr/local/bin/oc
 
 # Install common Python tools
-RUN pip3 install --no-cache-dir \
+RUN uv pip install --system --no-cache \
     pytest \
     requests \
-    pyyaml
+    pyyaml \
+    ruff \
+    tox \
+    tox-uv
 
 # Create claude user
 RUN useradd -m -u 1000 -s /bin/bash claude
@@ -44,10 +48,6 @@ RUN mkdir -p /home/claude/.claude/plugins
 COPY ./images/claude/claude-settings.json /home/claude/.claude/settings.json
 COPY ./images/claude/known_marketplaces.json /home/claude/.claude/plugins/known_marketplaces.json
 RUN chown -R claude:claude /home/claude/.claude
-
-# Create workspace directory
-RUN mkdir -p /workspace && chown -R claude:claude /workspace
-WORKDIR /workspace
 
 # Switch to claude user
 USER claude
