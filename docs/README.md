@@ -18,10 +18,11 @@ python3 scripts/build-website.py
 ```
 
 This extracts information from:
-- `.claude-plugin/marketplace.json` - Plugin registry
-- `claude-plugins/*/commands/*.md` - Command definitions
-- `claude-plugins/*/skills/*/SKILL.md` - Skill definitions
-- `claude-plugins/*/.claude-plugin/plugin.json` - Plugin metadata
+- `tools.json` - Centralized tool registry
+- `helpers/commands/*.md` - Command definitions
+- `helpers/skills/*/SKILL.md` - Skill definitions
+- `helpers/agents/*.md` - Agent definitions
+- `helpers/gems/gems.yaml` - Gemini Gems definitions
 
 ## Local Development
 

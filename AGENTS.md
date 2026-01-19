@@ -4,29 +4,48 @@ This repository serves as a collaborative marketplace for AI automation tools, p
 
 ## Repository Purpose
 
-The odh-ai-helpers repository hosts collections of:
-- **Claude Code Plugins**: Custom commands, skills, agents that extend Claude Code's functionality
-- **Cursor AI Commands**: Custom commands for Cursor AI integration
-- **Gemini Gems**: Specialized AI assistants for various development tasks
+The odh-ai-helpers repository hosts collections of four distinct tool types:
+- **Skills**: Standardized capabilities using agentskills.io format, compatible with Claude Code and Cursor
+- **Commands**: Atomic, executable actions for immediate functionality
+- **Agents**: Specialized AI entities for complex, multi-step workflows and analysis
+- **Gemini Gems**: Conversational AI assistants optimized for specific domains
 
-This enables teams to automate repetitive tasks, integrate with development tools, and create specialized AI assistants tailored to specific workflows and needs.
+This enables teams to automate repetitive tasks, integrate with development tools, and create specialized AI capabilities tailored to specific workflows and needs.
 
-## Supported AI Platforms
+## Tool Types
 
-### Claude Code
-Claude Code plugins extend Claude's functionality with custom commands for specific workflows. Plugins use a structured format with JSON metadata and Markdown command definitions.
+### Skills
+Standardized capabilities that work across multiple AI platforms using the agentskills.io specification. Skills provide reusable functionality with cross-platform compatibility.
 
-**→ For detailed Claude Code development instructions, see [@claude-plugins/README.md](claude-plugins/README.md)**
+**→ Located in [helpers/skills/](helpers/skills/) directory**
 
-### Cursor AI
-Cursor commands provide custom AI functionality within the Cursor development environment. Commands are implemented as simple Markdown files with descriptive instructions.
+### Commands
+Atomic, executable actions that provide immediate functionality. Commands are designed for quick, specific tasks and can be invoked directly by AI agents.
 
-**→ For detailed Cursor development instructions, see [@cursor/README.md](cursor/README.md)**
+**→ Located in [helpers/commands/](helpers/commands/) directory**
+
+### Agents
+Specialized AI entities capable of complex reasoning and multi-step workflows. Agents maintain context and can execute sophisticated analysis within their domain of expertise.
+
+**→ Located in [helpers/agents/](helpers/agents/) directory**
 
 ### Gemini Gems
-Gemini Gems are specialized AI assistants created within Google's Gemini platform. Each Gem can be tailored with specific instructions and knowledge bases for particular tasks.
+Conversational AI assistants created within Google's Gemini platform. Each Gem is tailored with specific instructions and knowledge bases for particular domains or tasks.
 
-**→ For detailed Gemini Gems instructions, see [@gemini-gems/README.md](gemini-gems/README.md)**
+**→ For detailed Gemini Gems instructions, see [Gemini Gems README](helpers/gems/README.md)**
+
+## Platform Support
+
+### Claude Code
+- **Skills**: Available through marketplace plugin entries
+- **Commands**: Available through marketplace plugin entries
+- **Agents**: Available as sub-agents through marketplace plugin entries
+
+
+### Cursor AI
+- **Skills**: Compatible through agentskills.io format
+- **Commands**: Can be adapted for Cursor command structure
+- **Agents**: Can be used as specialized workflow guides
 
 ## How to Create New Tools
 
@@ -44,8 +63,8 @@ Gemini Gems are specialized AI assistants created within Google's Gemini platfor
 
 3. **Validate and Test**
    ```bash
-   make lint      # Validate plugin structure
-   make update    # Regenerate documentation
+   make lint      # Validate tool structure
+   make update    # Update settings and website data
    ```
 
 4. **Submit Contribution**
@@ -53,45 +72,56 @@ Gemini Gems are specialized AI assistants created within Google's Gemini platfor
    - Update relevant documentation
    - Submit a merge request with your changes
 
-## Categorization System
+## Tool Registry
 
-The marketplace uses a categorization system to organize tools by their intended purpose and workflows. This helps users discover relevant tools and maintains a well-structured tool collection.
+The marketplace uses a centralized tool registry in `tools.json` to organize all available tools by their type and category. This provides a single source of truth for tool discovery and maintains a well-structured tool collection.
 
-### How Categories Work
+### Tool Registry Structure
 
-Categories are defined in `categories.json` at the repository root and automatically applied to tools:
+All tools are defined in `tools.json` at the repository root with the following structure:
 
-- **Claude Code plugins**: Categorized by plugin directory name
-- **Cursor commands**: Categorized by command filename (without .md extension)
-- **Gemini Gems**: Categorized by gem title in categories.json
+```json
+{
+  "tools": [
+    {
+      "name": "tool-name",
+      "description": "Tool description",
+      "type": "skill|command|agent|gem",
+      "category": "category-name"
+    }
+  ],
+  "categories": {
+    "category-name": {
+      "name": "Display Name",
+      "description": "Category description"
+    }
+  }
+}
+```
 
-### Current Categories
+### Available Categories
 
 - **General**: Default category for general-purpose tools and utilities
 - **AIPCC**: Tools specifically designed for AIPCC workflows and processes
+- **vLLM**: Tools specifically designed for vLLM workflows and processes
 
 ### Adding a New Category
 
-When you have multiple related tools that form a cohesive workflow or domain, consider creating a new category:
+When you have multiple related tools that form a cohesive workflow or domain:
 
-1. **Edit categories.json**: Add your category definition with clear name and description
+1. **Add category definition** to `tools.json`:
    ```json
-   {
-     "categories": {
-       "your-category": {
-         "name": "Your Category Name",
-         "description": "Clear description of the category's purpose and scope",
-         "claude_plugin_dirs": ["plugin1", "plugin2"],
-         "cursor_commands": ["command1", "command2"],
-         "gemini_gems": ["gem title", "gem title 2"]
-       }
+   "categories": {
+     "your-category": {
+       "name": "Your Category Name",
+       "description": "Clear description of the category's purpose and scope"
      }
    }
    ```
 
-2. **Assign existing tools**: Move relevant tools from other categories to your new category
+2. **Assign tools to the category** by setting their `category` field
 
-3. **Update documentation**: Run `make update` to regenerate the website and tool documentation
+3. **Update documentation**: Run `make update` to regenerate the website
 
 ### Category Guidelines
 
@@ -107,12 +137,12 @@ When you have multiple related tools that form a cohesive workflow or domain, co
 
 ### Automatic Management
 
-The build system automatically handles categorization maintenance:
+The build system automatically handles tool registry maintenance:
 - New tools are assigned to "general" if not explicitly categorized
-- Categories.json is updated during `make update` to include new tools
+- The registry is updated during `make update` to include new tools
 - Manual categorizations are preserved across updates
 
-This ensures all tools are categorized without requiring manual maintenance.
+This ensures all tools are properly registered and categorized without manual maintenance overhead.
 
 ## Ethical Guidelines
 
@@ -127,7 +157,7 @@ This ensures consent, prevents misrepresentation, respects intellectual property
 
 ## Getting Started
 
-1. **Explore Existing Tools**: Browse [TOOLS.md](TOOLS.md) for available tools
+1. **Explore Existing Tools**: Browse [tools.json](tools.json) for available tools or visit our [website](https://opendatahub-io.github.io/ai-helpers/)
 2. **Choose Your Platform**: Review platform-specific READMEs for detailed guidance
 3. **Study Examples**: Look at existing implementations for structure and patterns
 4. **Start Contributing**: Follow the development workflow for your chosen platform
