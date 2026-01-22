@@ -67,6 +67,10 @@ rules:
     enabled: true
     severity: error
 
+  tools-json-validation:
+    enabled: true
+    severity: error
+
 # Exclude patterns
 exclude: []
 

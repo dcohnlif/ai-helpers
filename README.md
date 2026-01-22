@@ -20,9 +20,87 @@ Simply file a GitHub issue with your idea in the title and we'll work together t
 No implementation details needed - just describe what you'd like to automate or what workflow you think could be
 improved. The community can help figure out the best way to build it.
 
-## Claude Code Plugins
+## Tools Development
 
-Claude Code plugins extend Claude's functionality with custom commands, subagents, and skills for specific workflows and
+This repository is made for collaboration. We highly welcome contributions.
+
+For skills, check out the `helpers/skills/` directory for examples.
+For commands, check the `helpers/commands/` directory, and for agents see the `helpers/agents/` directory.
+Using AI code assistant itself to develop the tools is highly encouraged.
+
+### Adding local plugin to session to be able to test (example with Claude Code)
+
+1. Open `claude`
+2. Run `/plugin marketplace add ./`
+3. Run `/plugin` then install the local plugin
+4. Test plugin and remove local marketplace after done testing which will remove plugin
+5. You can now reinstall from the git marketplace
+
+### Adding New Tools
+
+When contributing new tools:
+
+1. **Skills**: Add to the `helpers/skills/` directory following the agentskills.io format
+2. **Commands**: Add to the `helpers/commands/` directory as Markdown files
+3. **Agents**: Add to the `helpers/agents/` directory with appropriate documentation
+4. **Gemini Gems**: Add to the `helpers/gems/` directory
+
+## Tool Registry
+
+The AI Helpers marketplace uses a centralized tool registry in `tools.json` to organize all available tools by their type and category. This provides a single source of truth for tool discovery across all supported AI platforms.
+
+### Tool Registry Structure
+
+All tools are registered in `tools.json` with their metadata:
+
+```json
+{
+  "tools": [
+    {
+      "name": "tool-name",
+      "description": "Tool description",
+      "type": "skill|command|agent|gem",
+      "category": "category-name"
+    }
+  ],
+  "categories": {
+    "category-name": {
+      "name": "Display Name",
+      "description": "Category description"
+    }
+  }
+}
+```
+
+### Adding a New Category
+
+To add a new category, edit `tools.json` to include the category definition and assign tools to it:
+
+1. **Add category definition**:
+   ```json
+   "categories": {
+     "your-category": {
+       "name": "Your Category Name",
+       "description": "Description of your category's purpose"
+     }
+   }
+   ```
+
+2. **Assign tools** by setting their `category` field
+
+3. **Update documentation**: Run `make update` to regenerate the website
+
+### Automatic Management
+
+The build system automatically handles tool registry maintenance:
+- New tools are assigned to "general" if not explicitly categorized
+- The registry is updated during `make update` to include new tools
+- Manual categorizations are preserved across updates
+
+
+## Using with Claude Code
+
+Claude Code Marketplace extends Claude's functionality with custom commands, agents, and skills for specific workflows and
 tasks.
 They enable you to automate repetitive development activities, integrate with tools, and create specialized AI
 assistants tailored to your needs.
@@ -30,7 +108,7 @@ assistants tailored to your needs.
 For comprehensive information about plugin architecture and development, see
 the [official Claude Code plugins documentation](https://docs.claude.com/en/docs/claude-code/plugins-reference).
 
-### Install the plugins from the Marketplace
+### Install the tools from the Marketplace
 
 1. **Add the marketplace:**
    ```bash
@@ -40,13 +118,13 @@ the [official Claude Code plugins documentation](https://docs.claude.com/en/docs
 
 2. **Install a plugin:**
    ```bash
-   /plugin install hello-world@odh-ai-helpers
+   /plugin install odh-ai-helpers
    ```
 
 > [!TIP]
 > To browse and install multiple plugins interactively, use `/plugin` after adding the marketplace.
 > This will show you all available plugins and allow you to install them selectively.
-> For a complete list of all available plugins, see **[TOOLS.md](TOOLS.md)**.
+> For a complete list of all available tools, see **[tools.json](tools.json)** or visit our [website](https://opendatahub-io.github.io/ai-helpers/).
 
 3. **Use the commands:**
    ```bash
@@ -122,128 +200,14 @@ claude-container() {
 }
 ```
 
-### Plugin Development
-
-This repository is made for collaboration. We highly welcome contributions.
-
-For Claude plugins, check out the `claude-plugins/` directory for examples.
-Make sure your commands and agents follow the conventions for the Sections structure presented in the hello-world
-reference implementation plugin (see [`hello-world:echo`](claude-plugins/hello-world/commands/echo.md) for an example).
-Using Claude Code itself to develop the plugins is highly encouraged.
-
-### Adding local plugin to session to be able to test
-
-1. Open `claude`
-2. Run `/plugin marketplace add ./`
-3. Run `/plugin` then install the local plugin
-4. Test plugin and remove local marketplace after done testing which will remove plugin
-5. You can now reinstall from the git marketplace
-
-### Adding New Commands
-
-When contributing new commands:
-
-1. **If your command fits an existing plugin**: Add it to the appropriate plugin's `commands/` directory
-2. **If your command doesn't have a clear parent plugin**: Add it to the **utils plugin** (
-   `claude-plugins/utils/commands/`)
-    - The utils plugin serves as a catch-all for commands that don't fit existing categories
-    - Once we accumulate several related commands in utils, they can be segregated into a new targeted plugin
-
-### Creating a New Plugin
-
-For detailed Claude Code development instructions, see [claude-plugins/README.md](claude-plugins/README.md).
-
-## Categorization System
-
-The AI Helpers marketplace uses a categorization system to organize tools by their intended purpose and workflows.
-Categories are defined in `categories.json` and automatically applied to tools in the website interface.
-
-### Available Categories
-
-- **General**: Default category for general-purpose tools and utilities
-- **AIPCC**: Tools specifically designed for AIPCC workflows and processes
-
-### How Categorization Works
-
-Categories are configured in the `categories.json` file at the repository root. Each category defines:
-
-- `name`: Display name for the category
-- `description`: Brief description of the category's purpose
-- `claude_plugin_dirs`: List of Claude Code plugin directory names that belong to this category
-- `cursor_commands`: List of Cursor command names that belong to this category
-
-Example category definition:
-
-```json
-{
-  "categories": {
-    "general": {
-      "name": "General",
-      "description": "General-purpose tools and utilities",
-      "claude_plugin_dirs": [
-        "git",
-        "utils",
-        "python-packaging"
-      ],
-      "cursor_commands": [
-        "jira-sprint-summary"
-      ],
-      "gemini_gems": [
-        "Email Copilot",
-        "Technical Spike & Investigation"
-      ]
-    }
-  }
-}
-```
-
-### Adding a New Category
-
-To add a new category:
-
-1. **Edit `categories.json`**: Add your new category definition
-   ```json
-   "your-category": {
-     "name": "Your Category Name",
-     "description": "Description of your category's purpose",
-     "claude_plugin_dirs": ["plugin1", "plugin2"],
-     "cursor_commands": ["command1", "command2"],
-     "gemini_gems": ["gem title", "gem title 2"]
-   }
-   ```
-
-2. **Assign tools to the category**:
-    - For Claude Code plugins: Add the plugin directory name to `claude_plugin_dirs`
-    - For Cursor commands: Add the command name (without .md extension) to `cursor_commands`
-    - For Gemini Gems: Add the gem title to `gemini_gems`
-
-3. **Update documentation**: Run `make update` to regenerate the website data
-
-### Automatic Categorization
-
-The build system automatically:
-
-- Assigns uncategorized tools to the "general" category
-- Updates `categories.json` during `make update` to include any new tools
-- Preserves manual categorizations while ensuring no tools are left uncategorized
-
-This ensures zero maintenance burden for new tools while preserving intentional categorization.
-
-## Cursor
-
-The `cursor/` directory contains custom commands and functionalities specifically designed for Cursor AI integration.
-When possible, the commands are shared with Claude Code to avoid duplication.
-
-For detailed documentation on Cursor AI helpers, see [cursor/README.md](cursor/README.md).
-
 ## Gemini Gems
 
-The `gemini-gems/` directory contains a curated collection of Gemini Gems - specialized AI assistants for various
+The `helpers/gems/` directory contains a curated collection of Gemini Gems - specialized AI assistants for various
 development tasks. These can be accessed directly through Google's Gemini platform.
 
-For detailed information about using and contributing Gemini Gems, see [gemini-gems/README.md](gemini-gems/README.md).
+For detailed information about using and contributing Gemini Gems, see [helpers/gems/README.md](helpers/gems/README.md).
 
-## Validating Plugins
+## Validating Tools
 
 This repository uses [claudelint](https://github.com/stbenjam/claudelint) to validate the Claude plugin structure:
 
@@ -251,17 +215,9 @@ This repository uses [claudelint](https://github.com/stbenjam/claudelint) to val
 make lint
 ```
 
-## Updating Plugin Documentation
-
-After adding or modifying plugins, regenerate the TOOLS.md file:
-
-```bash
-make update
-```
-
 ## Ethical Guidelines
 
-Plugins, commands, skills, and hooks must NEVER reference real people by name, even as stylistic examples (e.g., "in the
+We must NEVER reference real people by name, even as stylistic examples (e.g., "in the
 style of 'specific human'").
 
 **Ethical rationale:**
@@ -293,7 +249,7 @@ pre-commit install --hook-type pre-push
 pre-commit run --all-files  # Test all files
 ```
 
-This automatically scans all plugins and regenerates the complete plugin/command documentation in [TOOLS.md](TOOLS.md).
+This automatically scans all tools and regenerates the complete documentation and website data.
 
 ## License
 
